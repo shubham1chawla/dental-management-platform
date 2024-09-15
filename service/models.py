@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import gettext_lazy as _
 
 
 class Address(models.Model):
@@ -11,7 +13,7 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=10, null=False, blank=False, validators=[
         RegexValidator(
             regex = r'^(^[0-9]{5}(?:-[0-9]{4})?$|^$)',
-            message = 'Must be valid zipcode in formats 12345 or 12345-1234',
+            message = _(u'Must be valid zipcode in formats 12345 or 12345-1234'),
         )
     ])
 
@@ -56,3 +58,29 @@ class DoctorClinicAffiliation(models.Model):
 
     clinic_id = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=False)
     doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
+
+
+def validate_ssn(value):
+    ssn_len = len(str(value))
+    if ssn_len != 4:
+        raise ValidationError(_(f'SSN should be the last 4 digits only'))
+
+
+class Patient(models.Model):
+
+    class Gender(models.TextChoices):
+        MALE = 'M'
+        FEMALE = 'F'
+        OTHER = 'O'
+
+    name = models.CharField(max_length=120, null=False)
+    email = models.EmailField(unique=True, null=False)
+    phone_number = PhoneNumberField(null=False, blank=False, unique=True)
+    address = models.ForeignKey(Address, on_delete=models.RESTRICT, null=False)
+    dob = models.DateField(null=False)
+    ssn = models.IntegerField(null=False, blank=False, validators=[validate_ssn])
+    gender = models.CharField(max_length=1, choices=Gender.choices, null=False, blank=False)
+
+
+    def __str__(self):
+        return f'Patient[name={self.name}]'

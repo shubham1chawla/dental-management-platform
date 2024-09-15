@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from service.models import Clinic, Doctor, DoctorClinicAffiliation
-from .serializers import ClinicSerializer, DoctorSerializer
+from service.models import Clinic, Doctor, DoctorClinicAffiliation, Patient
+from .serializers import ClinicSerializer, DoctorSerializer, PatientSerializer
 
 
 @api_view(['GET'])
@@ -25,4 +25,11 @@ def get_doctors_by_clinic_id(_, clinic_id):
 def get_doctors(_):
     doctors = Doctor.objects.all()
     serializer = DoctorSerializer(doctors, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_patients(_):
+    patients = Patient.objects.all()
+    serializer = PatientSerializer(patients, many=True)
     return Response(serializer.data)
