@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from service.models import Address, Clinic, Doctor, Procedure, Patient
+from service.models import Address, Clinic, Doctor, DoctorSchedule, Procedure, Patient
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -27,6 +27,15 @@ class DoctorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctor
+        fields = '__all__'
+
+
+class DoctorScheduleSerializer(serializers.ModelSerializer):
+    clinic = ClinicSerializer(source='clinic_id', many=False, read_only=True)
+    doctor = DoctorSerializer(source='doctor_id', many=False, read_only=True)
+
+    class Meta:
+        model = DoctorSchedule
         fields = '__all__'
 
 

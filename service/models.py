@@ -50,6 +50,14 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f'Doctor[name={self.name}]'
+    
+
+class DoctorSchedule(models.Model):
+    date = models.DateField(null=False)
+    start_time = models.TimeField(null=False)
+    end_time = models.TimeField(null=False)
+    clinic_id = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=False)
+    doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
 
 
 class DoctorClinicAffiliation(models.Model):
