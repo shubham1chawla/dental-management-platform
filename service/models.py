@@ -92,3 +92,15 @@ class Patient(models.Model):
 
     def __str__(self):
         return f'Patient[name={self.name}]'
+    
+
+class Appointment(models.Model):
+    clinic_id = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=False)
+    doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
+    patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE, null=False)
+    date = models.DateField(null=False)
+    start_time = models.TimeField(null=False)
+    end_time = models.TimeField(null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
