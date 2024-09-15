@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from clinics.models import Clinic
+from service.models import Clinic
 from .serializers import ClinicSerializer
 
 @api_view(['GET'])

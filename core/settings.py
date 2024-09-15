@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Application-specific apps
-    "clinics",
+    "service",
 ]
 
 MIDDLEWARE = [
