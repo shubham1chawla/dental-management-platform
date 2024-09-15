@@ -31,3 +31,11 @@ class Doctor(models.Model):
     email = models.EmailField(unique=True, null=False)
     phone_number = PhoneNumberField(null=False, blank=False, unique=True)
     specialty = models.ForeignKey(Procedure, on_delete=models.RESTRICT, null=False)
+
+
+class DoctorClinicAffiliation(models.Model):
+    class Meta:
+        unique_together = (('clinic_id', 'doctor_id'))
+
+    clinic_id = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=False)
+    doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
