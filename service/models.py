@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from phonenumber_field.modelfields import PhoneNumberField
 
-# Create your models here.
+
 class Clinic(models.Model):
     name = models.CharField(max_length=120, unique=True, null=False)
     address = models.CharField(max_length=200, null=False)
@@ -16,3 +16,18 @@ class Clinic(models.Model):
     ])
     email = models.EmailField(unique=True, null=False)
     phone_number = PhoneNumberField(null=False, blank=False, unique=True)
+
+
+class Procedure(models.Model):
+    name = models.CharField(max_length=20, unique=True, null=True)
+
+    def __str__(self):
+        return f'Procedure[name={self.name}]'
+
+
+class Doctor(models.Model):
+    npi = models.CharField(max_length=10, unique=True, null=False)
+    name = models.CharField(max_length=120, null=False)
+    email = models.EmailField(unique=True, null=False)
+    phone_number = PhoneNumberField(null=False, blank=False, unique=True)
+    specialty = models.ForeignKey(Procedure, on_delete=models.RESTRICT, null=False)
