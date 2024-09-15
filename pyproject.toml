@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.1.1"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "^8.0.0"}
 
 
 [build-system]
