@@ -1,7 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import api_view
-from .serializers import ClinicSerializer, DoctorSerializer, DoctorScheduleSerializer, PatientSerializer
+from .serializers import ClinicSerializer, DoctorSerializer, DoctorScheduleSerializer, PatientSerializer, DoctorAppointmentSlotSerializer
+import datetime
 from service import interface
 from service import errors
 
@@ -14,7 +15,7 @@ def get_clinics(_):
 
 
 @api_view(['GET'])
-def get_doctors_by_clinic_id(_, clinic_id: int):
+def get_clinic_doctors(_, clinic_id: int):
     try:
         doctors = interface.get_doctors(clinic_id)
     except errors.NoClinicFoundError as error:
@@ -32,13 +33,20 @@ def get_doctors(_):
 
 
 @api_view(['GET'])
-def get_schedule_by_doctor_id(_, doctor_id: int):
+def get_doctor_schedules(_, doctor_id: int):
     try:
-        schedule = interface.get_schedule(doctor_id)
+        schedule = interface.get_schedules(doctor_id)
     except errors.NoDoctorFoundError as error:
         raise NotFound(error)
 
     serializer = DoctorScheduleSerializer(schedule, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_doctor_appointment_slots(_, doctor_id: int, schedule_date: datetime.date):
+    slots = interface.get_doctor_appointment_slots(doctor_id, schedule_date)
+    serializer = DoctorAppointmentSlotSerializer(slots, many=True)
     return Response(serializer.data)
 
 

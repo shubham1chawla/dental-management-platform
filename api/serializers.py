@@ -45,3 +45,10 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = '__all__'
+
+
+class DoctorAppointmentSlotSerializer(serializers.Serializer):
+    date = serializers.DateField(read_only=True)
+    start_time = serializers.TimeField(read_only=True)
+    end_time = serializers.TimeField(read_only=True)
+    booked = serializers.BooleanField(read_only=True)

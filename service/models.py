@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
+import datetime
 
 
 class Address(models.Model):
@@ -104,3 +105,11 @@ class Appointment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+
+class DoctorAppointmentSlot:
+    def __init__(self, date: datetime.date, start_time: datetime.time, duration: datetime.timedelta):
+        self.date = date
+        self.start_time = start_time
+        self.end_time = (datetime.datetime.combine(date, start_time) + duration).time()
+        self.duration = duration
+        self.booked = False
