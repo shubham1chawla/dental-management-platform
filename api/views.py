@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import api_view
-from .serializers import ClinicSerializer, DoctorSerializer, DoctorScheduleSerializer, PatientSerializer, DoctorAppointmentSlotSerializer
+from . import serializers
 import datetime
 from service import interface
 from service import errors
@@ -10,7 +10,14 @@ from service import errors
 @api_view(['GET'])
 def get_clinics(_):
     clinics = interface.get_clinics()
-    serializer = ClinicSerializer(clinics, many=True)
+    serializer = serializers.ClinicSerializer(clinics, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def add_clinic(request):
+    clinic = interface.add_clinic(**request.data)
+    serializer = serializers.ClinicSerializer(clinic, many=False)
     return Response(serializer.data)
 
 
@@ -21,14 +28,14 @@ def get_clinic_doctors(_, clinic_id: int):
     except errors.NoClinicFoundError as error:
         raise NotFound(error)
 
-    serializer = DoctorSerializer(doctors, many=True)
+    serializer = serializers.DoctorSerializer(doctors, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def get_doctors(_):
     doctors = interface.get_doctors()
-    serializer = DoctorSerializer(doctors, many=True)
+    serializer = serializers.DoctorSerializer(doctors, many=True)
     return Response(serializer.data)
 
 
@@ -39,19 +46,19 @@ def get_doctor_schedules(_, doctor_id: int):
     except errors.NoDoctorFoundError as error:
         raise NotFound(error)
 
-    serializer = DoctorScheduleSerializer(schedule, many=True)
+    serializer = serializers.DoctorScheduleSerializer(schedule, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def get_doctor_appointment_slots(_, doctor_id: int, schedule_date: datetime.date):
     slots = interface.get_doctor_appointment_slots(doctor_id, schedule_date)
-    serializer = DoctorAppointmentSlotSerializer(slots, many=True)
+    serializer = serializers.DoctorAppointmentSlotSerializer(slots, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def get_patients(_):
     patients = interface.get_patients()
-    serializer = PatientSerializer(patients, many=True)
+    serializer = serializers.PatientSerializer(patients, many=True)
     return Response(serializer.data)

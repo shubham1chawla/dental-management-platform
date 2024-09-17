@@ -1,7 +1,7 @@
 from typing import List, Optional, Final
 import datetime
 from django.db.models import Q
-from .models import Clinic, Doctor, DoctorClinicAffiliation, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot
+from .models import Address, Clinic, Doctor, DoctorClinicAffiliation, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot
 from .errors import NoClinicFoundError, NoDoctorFoundError
 
 
@@ -14,6 +14,18 @@ DEFAULT_SLOT_BUFFER: Final[datetime.timedelta] = datetime.timedelta(minutes=5)
 
 def get_clinics() -> List[Clinic]:
     return Clinic.objects.all()
+
+
+def add_clinic(**kwargs) -> Clinic:
+    # Saving the address details
+    address = Address(**kwargs['address'])
+    address.save()
+
+    # Saving the clinic details
+    del kwargs['address']
+    clinic = Clinic(**kwargs, address=address)
+    clinic.save()
+    return clinic
 
 
 def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
