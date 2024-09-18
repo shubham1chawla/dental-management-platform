@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # Application-specific apps
     "service",
+    "web",
 ]
 
 MIDDLEWARE = [
