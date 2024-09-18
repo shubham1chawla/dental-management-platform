@@ -37,6 +37,10 @@ urlpatterns = [
         view=views.get_clinic_doctors, 
         name="GET Clinic's Doctors"),
     path(
+        'clinics/<int:clinic_id>/patients/list', 
+        view=views.get_clinic_patients, 
+        name="GET Clinic's Patients"),
+    path(
         'doctors/list', 
         view=views.get_doctors, 
         name='GET Doctors'),
@@ -44,6 +48,10 @@ urlpatterns = [
         'doctors/<int:doctor_id>', 
         view=views.get_doctor, 
         name='GET Specific Doctor'),
+    path(
+        'doctors/<int:doctor_id>/patients/list', 
+        view=views.get_doctor_patients, 
+        name="GET Doctor's Patients"),
     path(
         'doctors/<int:doctor_id>/schedules/list', 
         view=views.get_doctor_schedules, 

@@ -89,8 +89,25 @@ def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[Do
     return slots
 
 
-def get_patients() -> List[Patient]:
-    return Patient.objects.all()
+def get_patients(**kwargs) -> List[Patient]:
+    if 'clinic_id' not in kwargs and 'doctor_id' not in kwargs:
+        return Patient.objects.all()
+
+    clinic = doctor = None
+    filters = {}
+    
+    # Checking if clinic ID provided
+    if 'clinic_id' in kwargs:
+        clinic = get_clinic(kwargs['clinic_id'])
+        filters['clinic_id'] = clinic.id
+
+    # Checking if doctor ID provided
+    if 'doctor_id' in kwargs:
+        doctor = get_doctor(kwargs['doctor_id'])
+        filters['doctor_id'] = doctor.id
+
+    patient_ids = Appointment.objects.filter(**filters).values_list('patient_id', flat=True).distinct()
+    return [get_patient(id) for id in patient_ids]
 
 
 def get_patient(id: int) -> Patient:
