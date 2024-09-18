@@ -16,6 +16,13 @@ def get_clinics() -> List[Clinic]:
     return Clinic.objects.all()
 
 
+def get_clinic(id: int) -> Clinic:
+    if not id or not Clinic.objects.filter(id=id).exists():
+        raise NoClinicFoundError(id)
+    
+    return Clinic.objects.get(id=id)
+
+
 def add_clinic(**kwargs) -> Clinic:
     # Saving the address details
     address = Address(**kwargs['address'])

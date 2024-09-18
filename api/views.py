@@ -14,6 +14,13 @@ def get_clinics(_):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+def get_clinic(_, clinic_id: int) :
+    clinic = interface.get_clinic(clinic_id)
+    serializer = serializers.ClinicSerializer(clinic)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def add_clinic(request):
     clinic = interface.add_clinic(**request.data)
