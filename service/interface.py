@@ -2,7 +2,7 @@ from typing import List, Optional, Final
 import datetime
 from django.db.models import Q
 from .models import Address, Clinic, Doctor, DoctorClinicAffiliation, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot
-from .errors import NoClinicFoundError, NoDoctorFoundError
+from . import errors
 
 
 """
@@ -18,7 +18,7 @@ def get_clinics() -> List[Clinic]:
 
 def get_clinic(id: int) -> Clinic:
     if not id or not Clinic.objects.filter(id=id).exists():
-        raise NoClinicFoundError(id)
+        raise errors.NoClinicFoundError(id)
     
     return Clinic.objects.get(id=id)
 
@@ -41,7 +41,7 @@ def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
     
     # Checking if clinic exists
     if not Clinic.objects.filter(id=clinic_id).exists():
-        raise NoClinicFoundError(clinic_id)
+        raise errors.NoClinicFoundError(clinic_id)
     
     affiliations = DoctorClinicAffiliation.objects.filter(clinic_id=clinic_id)
     return [affiliation.doctor_id for affiliation in affiliations]
@@ -49,7 +49,7 @@ def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
 
 def get_doctor(id: int) -> Doctor:
     if not id or not Doctor.objects.filter(id=id).exists():
-        raise NoDoctorFoundError(id)
+        raise errors.NoDoctorFoundError(id)
     
     return Doctor.objects.get(id=id)
 
@@ -57,7 +57,7 @@ def get_doctor(id: int) -> Doctor:
 def get_schedules(doctor_id: int, date: Optional[datetime.date] = None) -> List[DoctorSchedule]:
     # Checking if doctor exists
     if not Doctor.objects.filter(id=doctor_id).exists():
-        raise NoDoctorFoundError(doctor_id)
+        raise errors.NoDoctorFoundError(doctor_id)
     
     if not date:
         return DoctorSchedule.objects.filter(doctor_id=doctor_id, date__gte=datetime.date.today())
@@ -91,3 +91,10 @@ def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[Do
 
 def get_patients() -> List[Patient]:
     return Patient.objects.all()
+
+
+def get_patient(id: int) -> Patient:
+    if not id or not Patient.objects.filter(id=id).exists():
+        raise errors.NoPatientFoundError(id)
+    
+    return Patient.objects.get(id=id)

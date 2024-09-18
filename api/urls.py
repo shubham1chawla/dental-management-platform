@@ -56,4 +56,8 @@ urlpatterns = [
         'patients/list', 
         view=views.get_patients, 
         name='GET Patients'),
+    path(
+        'patients/<int:patient_id>', 
+        view=views.get_patient, 
+        name='GET Specific Patient'),
 ]

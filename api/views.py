@@ -76,3 +76,10 @@ def get_patients(_):
     patients = interface.get_patients()
     serializer = serializers.PatientSerializer(patients, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_patient(_, patient_id: int) :
+    patient = interface.get_patient(patient_id)
+    serializer = serializers.PatientSerializer(patient)
+    return Response(serializer.data)
