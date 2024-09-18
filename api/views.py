@@ -47,6 +47,13 @@ def get_doctors(_):
 
 
 @api_view(['GET'])
+def get_doctor(_, doctor_id: int) :
+    doctor = interface.get_doctor(doctor_id)
+    serializer = serializers.DoctorSerializer(doctor)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_doctor_schedules(_, doctor_id: int):
     try:
         schedule = interface.get_schedules(doctor_id)

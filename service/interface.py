@@ -47,6 +47,13 @@ def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
     return [affiliation.doctor_id for affiliation in affiliations]
 
 
+def get_doctor(id: int) -> Doctor:
+    if not id or not Doctor.objects.filter(id=id).exists():
+        raise NoDoctorFoundError(id)
+    
+    return Doctor.objects.get(id=id)
+
+
 def get_schedules(doctor_id: int, date: Optional[datetime.date] = None) -> List[DoctorSchedule]:
     # Checking if doctor exists
     if not Doctor.objects.filter(id=doctor_id).exists():
