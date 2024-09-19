@@ -37,7 +37,7 @@
 <div class="row">
     {% for doctor in doctors %}
         <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-            {% component "doctor-card" doctor="{{doctor}}" / %}
+            {% component "clinic-doctor-card" doctor="{{doctor}}" clinic="{{clinic}}" / %}
         </div>
     {% endfor %}
 </div>

@@ -54,21 +54,32 @@ def get_doctor(id: int) -> Doctor:
     return Doctor.objects.get(id=id)
 
 
-def get_schedules(doctor_id: int, date: Optional[datetime.date] = None) -> List[DoctorSchedule]:
+def get_schedules(doctor_id: int, **kwargs) -> List[DoctorSchedule]:
     # Checking if doctor exists
     if not Doctor.objects.filter(id=doctor_id).exists():
         raise errors.NoDoctorFoundError(doctor_id)
     
-    if not date:
+    if 'date' not in kwargs and 'clinic_id' not in kwargs:
         return DoctorSchedule.objects.filter(doctor_id=doctor_id)
     
-    # Calculating the ISO weekday
-    weekday = date.weekday()
-    return DoctorSchedule.objects.filter(doctor_id=doctor_id, weekday=weekday).order_by('start_time')
+    filters = {
+        'doctor_id': doctor_id
+    }
+
+    if 'date' in kwargs and isinstance(kwargs['date'], datetime.date):
+        date = kwargs['date']
+
+        # Calculating the ISO weekday
+        filters['weekday'] = date.weekday()
+
+    if 'clinic_id' in kwargs and isinstance(kwargs['clinic_id'], int):
+        filters['clinic_id'] = kwargs['clinic_id']
+
+    return DoctorSchedule.objects.filter(**filters).order_by('start_time')
 
 
 def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[DoctorAppointmentSlot]:
-    schedules = get_schedules(doctor_id, date)
+    schedules = get_schedules(doctor_id, date=date)
     if not schedules:
         return []
 

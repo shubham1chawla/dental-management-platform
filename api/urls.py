@@ -37,6 +37,10 @@ urlpatterns = [
         view=views.get_clinic_doctors, 
         name="GET Clinic's Doctors"),
     path(
+        'clinics/<int:clinic_id>/doctors/<int:doctor_id>/schedules/list', 
+        view=views.get_clinic_doctor_schedules, 
+        name="GET Clinic's Doctor's schedules"),
+    path(
         'clinics/<int:clinic_id>/patients/list', 
         view=views.get_clinic_patients, 
         name="GET Clinic's Patients"),
