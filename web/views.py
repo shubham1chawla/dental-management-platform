@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from service import interface
+
 
 def get_clinics_page(request):
-    return render(request, 'clinics.html')
+    context = {
+        'clinics': interface.get_clinics()
+    }
+    return render(request, 'clinics.html', context=context)
 
 
 def get_doctors_page(request):
