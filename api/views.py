@@ -1,8 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from . import serializers
 import datetime
+import json
 from service import interface
 from service import errors
 
@@ -21,11 +24,21 @@ def get_clinic(_, clinic_id: int) :
     return Response(serializer.data)
 
 
-@api_view(['POST'])
-def add_clinic(request):
-    clinic = interface.add_clinic(**request.data)
+@csrf_exempt
+def add_clinic(request: HttpRequest) -> HttpResponse:
+    data = json.loads(request.body)
+
+    serializer = serializers.ClinicSerializer(data=data)
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+    
+    serializer = serializers.AddressSerializer(data=data['address'])
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+
+    clinic = interface.add_clinic(**data)
     serializer = serializers.ClinicSerializer(clinic, many=False)
-    return Response(serializer.data)
+    return HttpResponse(serializer.data)
 
 
 @api_view(['GET'])

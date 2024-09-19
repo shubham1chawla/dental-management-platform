@@ -2,21 +2,21 @@
 
 {% block content %}
 
-<div class="d-flex align-items-center justify-content-between my-4">
-    <div>
-        <h3>
-            <i class="bi bi-building"></i> {{clinic.name}}
-        </h3>
-        <p class="m-0">
-            View {{clinic.name}}'s information and affiliated doctors.
-            Update clinic's details using the <i class="bi bi-pencil-square"></i> button.
-        </p>
-    </div>
-    <a class="btn btn-primary" style="height: fit-content" role="button" href="/clinics/add">
-        <i class="bi bi-pencil-square"></i>
-        Update Clinic
-    </a>
-</div>
+{% component "page-header" %}
+    {% fill "heading" %}
+        <i class="bi bi-building"></i> {{clinic.name}}
+    {% endfill %}
+    {% fill "description" %}
+        View {{clinic.name}}'s information and affiliated doctors.
+        Update clinic's details using the <i class="bi bi-pencil-square"></i> button.
+    {% endfill %}
+    {% fill "action" %}
+        <a class="btn btn-primary" style="height: fit-content" role="button" href="/clinics/add">
+            <i class="bi bi-pencil-square"></i>
+            Update Clinic
+        </a>
+    {% endfill %}
+{% endcomponent %}
 
 <div class="card p-2 position-relative">
     <div class="col-12 my-2">

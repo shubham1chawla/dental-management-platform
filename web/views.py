@@ -17,6 +17,10 @@ def get_clinic_page(request, clinic_id: int):
     return render(request, 'clinic.html', context=context)
 
 
+def get_add_clinic_page(request):
+    return render(request, 'add-clinic.html')
+
+
 def get_doctors_page(request):
     return render(request, 'doctors.html')
 
