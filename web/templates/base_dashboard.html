@@ -10,30 +10,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="https://dtxplus.com/">
-                <img src="https://dtxplus.com/wp-content/uploads/2023/11/DTxPlus-Logo-Retinahidpi.png" alt="Logo" width="60" height="24" class="d-inline-block align-text-top">
-                Dental Management
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link {% block clinic_nav_active %}{% endblock %}" href="/clinics">Clinics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% block doctor_nav_active %}{% endblock %}" href="/doctors">Doctors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% block patient_nav_active %}{% endblock %}" href="/patients">Patients</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+
+    {% component "navbar" %}
+        {% fill "navbarlinks" %}
+            {% component "navbarlink" title="Clinics" href="/clinics" / %}
+            {% component "navbarlink" title="Doctors" href="/doctors" / %}
+            {% component "navbarlink" title="Patients" href="/patients" / %}
+        {% endfill %}
+    {% endcomponent %}
+
     <div class="container my-4">
         {% block content %}{% endblock content %}
     </div>
