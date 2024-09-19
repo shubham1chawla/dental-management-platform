@@ -1,0 +1,17 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+
+{% component "page-header" %}
+    {% fill "heading" %}
+        <i class="bi bi-person-lines-fill"></i> Add New Doctor
+    {% endfill %}
+    {% fill "description" %}
+        Fill out the new doctor's details.
+        Hit the <i class="bi bi-floppy2-fill"></i> button once you are done.
+    {% endfill %}
+{% endcomponent %}
+
+{% component "add-doctor-form" / %}
+
+{% endblock %}

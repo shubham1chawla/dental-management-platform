@@ -56,7 +56,7 @@
                 form.appendChild(alert);
                 console.log(alert);
     
-                button.setAttribute('disabled', false);
+                button.removeAttribute('disabled');
                 return;
             }
             window.location.pathname = '/clinics';

@@ -1,0 +1,50 @@
+<form id="add-doctor-form" class="card p-4">
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            NPI
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="npi-input" class="form-control" type="number" min="1000000000" max="9999999999" placeholder="1234567890" required />
+        <span id="npi-error" class="text-danger"></span>
+    </div>    
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Name
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="name-input" class="form-control" type="text" placeholder="Great Doctor" required />
+        <span id="name-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Email Address
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="email-input" class="form-control" type="email" placeholder="great@doctor.com" required />
+        <span id="email-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Phone Number
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="phone_number-input" class="form-control" type="tel" pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
+            placeholder="888 888 8888" required />
+        <span id="phone_number-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Specialties
+            <span class="text-danger">*required</span>
+        </label>
+        <select id="specialties-select" class="form-control" multiple required>
+            <!-- Adding via API call -->
+        </select>
+        <span id="specialties-error" class="text-danger">
+            Loading...
+        </span>
+    </div>
+    <button id="submit-button" type="submit" class="btn btn-primary" disabled>
+        <i class="bi bi-floppy2-fill"></i> Save
+    </button>
+</form>

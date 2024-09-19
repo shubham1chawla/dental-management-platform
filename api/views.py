@@ -88,6 +88,22 @@ def get_doctor(_, doctor_id: int):
     return Response(serializer.data)
 
 
+@csrf_exempt
+def add_doctor(request: HttpRequest):
+    data = json.loads(request.body)
+
+    serializer = serializers.DoctorSerializer(data=data)
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+    
+    if 'specialties' not in data or not isinstance(data['specialties'], list) or not data['specialties']:
+        return HttpResponseBadRequest()
+
+    doctor = interface.add_doctor(**data)
+    serializer = serializers.DoctorSerializer(doctor, many=False)
+    return HttpResponse(serializer.data)
+
+
 @api_view(['GET'])
 def get_doctor_specialties(_, doctor_id: int):
     try:
@@ -150,4 +166,10 @@ def get_patients(_):
 def get_patient(_, patient_id: int) :
     patient = interface.get_patient(patient_id)
     serializer = serializers.PatientSerializer(patient)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_procedures(_):
+    serializer = serializers.ProcedureSerializer(interface.get_procedures(), many=True)
     return Response(serializer.data)

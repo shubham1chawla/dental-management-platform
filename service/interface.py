@@ -62,6 +62,23 @@ def get_doctor(id: int) -> Doctor:
     return Doctor.objects.get(id=id)
 
 
+def add_doctor(**kwargs) -> Doctor:
+    procedure_ids = kwargs['specialties']
+    del kwargs['specialties']
+
+    # Saving the doctor details
+    doctor = Doctor(**kwargs)
+    doctor.save()
+
+    # Saving specialties
+    for procedure_id in procedure_ids:
+        procedure = Procedure.objects.get(id=procedure_id)
+        specialty = DoctorSpecialty(doctor_id=doctor, procedure_id=procedure)
+        specialty.save()
+
+    return doctor
+
+
 def get_doctor_specialties(id: int) -> List[Procedure]:
     if not id or not Doctor.objects.filter(id=id).exists():
         raise errors.NoDoctorFoundError(id)
@@ -145,3 +162,7 @@ def get_patient(id: int) -> Patient:
         raise errors.NoPatientFoundError(id)
     
     return Patient.objects.get(id=id)
+
+
+def get_procedures() -> List[Procedure]:
+    return Procedure.objects.all().order_by('name')
