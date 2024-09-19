@@ -33,6 +33,7 @@ def get_doctor_page(request, doctor_id: int):
         'doctor': interface.get_doctor(doctor_id),
         'clinics': interface.get_clinics(doctor_id),
         'specialties': ', '.join(map(lambda x: x.name, interface.get_doctor_specialties(doctor_id))),
+        'patients': interface.get_patients(doctor_id=doctor_id),
     }
     return render(request, 'doctor.html', context=context)
 
