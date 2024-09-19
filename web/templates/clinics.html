@@ -2,6 +2,19 @@
 
 {% block content %}
 
+<div class="d-flex align-items-center justify-content-between my-4">
+    <div>
+        <h3>
+            <i class="bi bi-building"></i> Clinics
+        </h3>
+        <p>Found {{clinics.count}} clinics in the system. Use the <i class="bi bi-plus-circle"></i> button to add a new clinic.</p>
+    </div>
+    <a class="btn btn-primary" style="height: fit-content" role="button" href="/clinics/add">
+        <i class="bi bi-plus-circle"></i>
+        Add Clinic
+    </a>
+</div>
+
 <div class="row">
     {% for clinic in clinics %}
         <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
