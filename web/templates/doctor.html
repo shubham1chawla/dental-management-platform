@@ -1,0 +1,49 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+
+{% component "page-header" %}
+    {% fill "heading" %}
+        <i class="bi bi-person-lines-fill"></i> {{doctor.name}}
+    {% endfill %}
+    {% fill "description" %}
+        View {{doctor.name}}'s information and affiliated clinics and patients.
+        Update doctor's details using the <i class="bi bi-pencil-square"></i> button.
+    {% endfill %}
+    {% fill "action" %}
+        <a class="btn btn-primary" style="height: fit-content" role="button" href="/doctors/update">
+            <i class="bi bi-pencil-square"></i>
+            Update
+        </a>
+    {% endfill %}
+{% endcomponent %}
+
+<div data-id="{{doctor.id}}" id="doctor-details" class="card px-4 py-2">
+    <div class="col-12 my-2">
+        <h5>NPI</h5>
+        <span><i class="bi bi-person-vcard"></i> {{doctor.npi}}</span>
+    </div>
+    <div class="col-12 my-2">
+        <h5>Phone Number</h5>
+        <span><i class="bi bi-telephone-fill"></i> {{doctor.phone_number}}</span>
+    </div>
+    <div class="col-12 my-2">
+        <h5>Email Address</h5>
+        <span><i class="bi bi-envelope-at-fill"></i> {{doctor.email}}</span>
+    </div>
+    <div class="col-12 my-2">
+        <h5>Specialties</h5>
+        <span><i class="bi bi-pen-fill"></i> {{specialties}}</span>
+    </div>
+</div>
+
+<h4 class="my-4">Affiliated Clinics</h4>
+<div class="row">
+    {% for clinic in clinics %}
+        <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+            {% component "doctor-clinic-card" doctor="{{doctor}}" clinic="{{clinic}}" / %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

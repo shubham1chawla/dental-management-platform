@@ -11,14 +11,14 @@
         Update clinic's details using the <i class="bi bi-pencil-square"></i> button.
     {% endfill %}
     {% fill "action" %}
-        <a class="btn btn-primary" style="height: fit-content" role="button" href="/clinics/add">
+        <a class="btn btn-primary" style="height: fit-content" role="button" href="/clinics/update">
             <i class="bi bi-pencil-square"></i>
-            Update Clinic
+            Update
         </a>
     {% endfill %}
 {% endcomponent %}
 
-<div class="card p-2 position-relative">
+<div class="card px-4 py-2">
     <div class="col-12 my-2">
         <h5>Address</h5>
         <span><i class="bi bi-geo-alt-fill"></i> {{clinic.address}}</span>

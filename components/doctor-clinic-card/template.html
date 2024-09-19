@@ -1,0 +1,31 @@
+<div data-id="{{clinic.id}}" data-doctor-id="{{doctor.id}}" class="card doctor-clinic-card h-100">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a class="card-link link-primary" href="/clinics/{{clinic.id}}">
+                {{clinic.name}}
+            </a>
+        </h5>
+        <div class="card-text">
+            <div class="my-2">
+                <div class="fw-medium"><i class="bi bi-calendar-event"></i> Monday: </div>
+                <span id="schedule-{{doctor.id}}-0">Loading Schedule...</span>
+            </div>
+            <div class="my-2">
+                <div class="fw-medium"><i class="bi bi-calendar-event"></i> Tuesday: </div>
+                <span id="schedule-{{doctor.id}}-1">Loading Schedule...</span>
+            </div>
+            <div class="my-2">
+                <div class="fw-medium"><i class="bi bi-calendar-event"></i> Wednesday: </div>
+                <span id="schedule-{{doctor.id}}-2">Loading Schedule...</span>
+            </div>
+            <div class="my-2">
+                <div class="fw-medium"><i class="bi bi-calendar-event"></i> Thursday: </div>
+                <span id="schedule-{{doctor.id}}-3">Loading Schedule...</span>
+            </div>
+            <div class="my-2">
+                <div class="fw-medium"><i class="bi bi-calendar-event"></i> Friday: </div>
+                <span id="schedule-{{doctor.id}}-4">Loading Schedule...</span>
+            </div>
+        </div>
+    </div>
+</div>
