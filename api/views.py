@@ -89,6 +89,17 @@ def get_doctor(_, doctor_id: int) :
 
 
 @api_view(['GET'])
+def get_doctor_clinics(_, doctor_id: int):
+    try:
+        clinics = interface.get_clinics(doctor_id)
+    except errors.NoDoctorFoundError as error:
+        raise NotFound(error)
+
+    serializer = serializers.ClinicSerializer(clinics, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_doctor_patients(_, doctor_id: int):
     try:
         patients = interface.get_patients(doctor_id=doctor_id)

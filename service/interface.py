@@ -12,8 +12,16 @@ DEFAULT_SLOT_DURATION: Final[datetime.timedelta] = datetime.timedelta(minutes=55
 DEFAULT_SLOT_BUFFER: Final[datetime.timedelta] = datetime.timedelta(minutes=5)
 
 
-def get_clinics() -> List[Clinic]:
-    return Clinic.objects.all()
+def get_clinics(doctor_id: Optional[int] = None) -> List[Clinic]:
+    if not doctor_id:
+        return Clinic.objects.all()
+    
+    # Checking if doctor exists
+    if not Doctor.objects.filter(id=doctor_id).exists():
+        raise errors.NoDoctorFoundError(doctor_id)
+    
+    clinic_ids = DoctorSchedule.objects.filter(doctor_id=doctor_id).values_list('clinic_id', flat=True).distinct()
+    return [get_clinic(clinic_id) for clinic_id in clinic_ids]
 
 
 def get_clinic(id: int) -> Clinic:

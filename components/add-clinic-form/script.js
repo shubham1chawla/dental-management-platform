@@ -1,5 +1,8 @@
 (function () {
-    document.querySelector('#add-client-form').addEventListener('submit', (e) => {
+    const form = document.querySelector('#add-client-form');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
         const address = {
             street_address_1: null,
@@ -50,7 +53,7 @@
                 alert.className = 'alert alert-danger mt-4';
                 alert.role = 'alert';
                 alert.innerHTML = 'An error occured while saving the clinic. Please try again later';
-                document.querySelector('#add-client-form').appendChild(alert);
+                form.appendChild(alert);
                 console.log(alert);
     
                 button.setAttribute('disabled', false);

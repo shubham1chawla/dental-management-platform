@@ -22,7 +22,10 @@ def get_add_clinic_page(request):
 
 
 def get_doctors_page(request):
-    return render(request, 'doctors.html')
+    context = {
+        'doctors': interface.get_doctors(),
+    }
+    return render(request, 'doctors.html', context=context)
 
 
 def get_patients_page(request):
