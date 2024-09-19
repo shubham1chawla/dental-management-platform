@@ -1,0 +1,45 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between my-4">
+    <div>
+        <h3>
+            <i class="bi bi-building"></i> {{clinic.name}}
+        </h3>
+        <p class="m-0">
+            View {{clinic.name}}'s information and affiliated doctors.
+            Update clinic's details using the <i class="bi bi-pencil-square"></i> button.
+        </p>
+    </div>
+    <a class="btn btn-primary" style="height: fit-content" role="button" href="/clinics/add">
+        <i class="bi bi-pencil-square"></i>
+        Update Clinic
+    </a>
+</div>
+
+<div class="card p-2 position-relative">
+    <div class="col-12 my-2">
+        <h5>Address</h5>
+        <span><i class="bi bi-geo-alt-fill"></i> {{clinic.address}}</span>
+    </div>
+    <div class="col-12 my-2">
+        <h5>Phone Number</h5>
+        <span><i class="bi bi-telephone-fill"></i> {{clinic.phone_number}}</span>
+    </div>
+    <div class="col-12 my-2">
+        <h5>Email Address</h5>
+        <span><i class="bi bi-envelope-at-fill"></i> {{clinic.email}}</span>
+    </div>
+</div>
+
+<h4 class="my-4">Affiliated Doctors</h4>
+<div class="row">
+    {% for doctor in doctors %}
+        <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+            {% component "doctor-card" doctor="{{doctor}}" / %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

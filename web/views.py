@@ -9,6 +9,14 @@ def get_clinics_page(request):
     return render(request, 'clinics.html', context=context)
 
 
+def get_clinic_page(request, clinic_id: int):
+    context = {
+        'clinic': interface.get_clinic(clinic_id),
+        'doctors': interface.get_doctors(clinic_id),
+    }
+    return render(request, 'clinic.html', context=context)
+
+
 def get_doctors_page(request):
     return render(request, 'doctors.html')
 
