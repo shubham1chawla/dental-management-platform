@@ -53,6 +53,10 @@ urlpatterns = [
         view=views.get_doctor, 
         name='GET Specific Doctor'),
     path(
+        'doctors/<int:doctor_id>/specialties/list', 
+        view=views.get_doctor_specialties, 
+        name="GET Doctor's specialties"),
+    path(
         'doctors/<int:doctor_id>/clinics/list', 
         view=views.get_doctor_clinics, 
         name="GET Doctor's Clinics"),

@@ -1,7 +1,7 @@
 from typing import List, Optional, Final
 import datetime
 from django.db.models import Q
-from .models import Address, Clinic, Doctor, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot
+from .models import Address, Clinic, Doctor, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot, Procedure, DoctorSpecialty
 from . import errors
 
 
@@ -60,6 +60,14 @@ def get_doctor(id: int) -> Doctor:
         raise errors.NoDoctorFoundError(id)
     
     return Doctor.objects.get(id=id)
+
+
+def get_doctor_specialties(id: int) -> List[Procedure]:
+    if not id or not Doctor.objects.filter(id=id).exists():
+        raise errors.NoDoctorFoundError(id)
+    
+    procedure_ids = DoctorSpecialty.objects.filter(doctor_id=id).values_list('procedure_id', flat=True).distinct()
+    return [Procedure.objects.get(id=procedure_id) for procedure_id in procedure_ids]
 
 
 def get_schedules(doctor_id: int, **kwargs) -> List[DoctorSchedule]:

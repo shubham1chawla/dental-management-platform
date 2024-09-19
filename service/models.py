@@ -46,11 +46,19 @@ class Doctor(models.Model):
     name = models.CharField(max_length=120, null=False)
     email = models.EmailField(unique=True, null=False)
     phone_number = PhoneNumberField(null=False, blank=False, unique=True)
-    specialty = models.ForeignKey(Procedure, on_delete=models.RESTRICT, null=False)
 
 
     def __str__(self):
         return f'Doctor[name={self.name}]'
+
+
+class DoctorSpecialty(models.Model):
+    class Meta:
+        unique_together = ('procedure_id', 'doctor_id')
+
+
+    procedure_id = models.ForeignKey(Procedure, on_delete=models.CASCADE, null=False)
+    doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
 
 
 # ISO Weekday
