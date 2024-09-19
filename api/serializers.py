@@ -33,6 +33,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 class DoctorScheduleSerializer(serializers.ModelSerializer):
     clinic = ClinicSerializer(source='clinic_id', many=False, read_only=True)
     doctor = DoctorSerializer(source='doctor_id', many=False, read_only=True)
+    office_address = AddressSerializer(many=False, read_only=True)
 
     class Meta:
         model = DoctorSchedule

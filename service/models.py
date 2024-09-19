@@ -51,22 +51,21 @@ class Doctor(models.Model):
 
     def __str__(self):
         return f'Doctor[name={self.name}]'
-    
+
+
+# ISO Weekday
+def validate_weekday(value: int):
+    if value < 0 or value > 6:
+        raise ValidationError(_(f'Weekday must be between 0 and 6'))
+
 
 class DoctorSchedule(models.Model):
-    date = models.DateField(null=False)
+    weekday = models.IntegerField(null=False, validators=[validate_weekday])
     start_time = models.TimeField(null=False)
     end_time = models.TimeField(null=False)
     clinic_id = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=False)
     doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
-
-
-class DoctorClinicAffiliation(models.Model):
-    class Meta:
-        unique_together = (('clinic_id', 'doctor_id'))
-
-    clinic_id = models.ForeignKey(Clinic, on_delete=models.CASCADE, null=False)
-    doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=False)
+    office_address = models.ForeignKey(Address, on_delete=models.RESTRICT, null=False)
 
 
 def validate_ssn(value):

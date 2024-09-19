@@ -1,7 +1,7 @@
 from typing import List, Optional, Final
 import datetime
 from django.db.models import Q
-from .models import Address, Clinic, Doctor, DoctorClinicAffiliation, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot
+from .models import Address, Clinic, Doctor, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot
 from . import errors
 
 
@@ -43,8 +43,8 @@ def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
     if not Clinic.objects.filter(id=clinic_id).exists():
         raise errors.NoClinicFoundError(clinic_id)
     
-    affiliations = DoctorClinicAffiliation.objects.filter(clinic_id=clinic_id)
-    return [affiliation.doctor_id for affiliation in affiliations]
+    doctor_ids = DoctorSchedule.objects.filter(clinic_id=clinic_id).values_list('doctor_id', flat=True).distinct()
+    return [get_doctor(doctor_id) for doctor_id in doctor_ids]
 
 
 def get_doctor(id: int) -> Doctor:
@@ -60,8 +60,11 @@ def get_schedules(doctor_id: int, date: Optional[datetime.date] = None) -> List[
         raise errors.NoDoctorFoundError(doctor_id)
     
     if not date:
-        return DoctorSchedule.objects.filter(doctor_id=doctor_id, date__gte=datetime.date.today())
-    return DoctorSchedule.objects.filter(doctor_id=doctor_id, date=date).order_by('start_time')
+        return DoctorSchedule.objects.filter(doctor_id=doctor_id)
+    
+    # Calculating the ISO weekday
+    weekday = date.weekday()
+    return DoctorSchedule.objects.filter(doctor_id=doctor_id, weekday=weekday).order_by('start_time')
 
 
 def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[DoctorAppointmentSlot]:
@@ -74,13 +77,13 @@ def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[Do
     for schedule in schedules:
         time = schedule.start_time
         while time < schedule.end_time:
-            slot = DoctorAppointmentSlot(schedule.date, time, DEFAULT_SLOT_DURATION)
+            slot = DoctorAppointmentSlot(date, time, DEFAULT_SLOT_DURATION)
 
             # Checking if the slot is available
-            doctor_criterion = Q(doctor_id=doctor_id, date=schedule.date)
+            doctor_criterion = Q(doctor_id=doctor_id, date=date)
             start_time_criterion = Q(start_time__lte=slot.start_time, end_time__gte=slot.start_time)
             end_time_criterion = Q(start_time__lte=slot.end_time, end_time__gte=slot.end_time)
-            slot.booked = Appointment.objects.filter(doctor_criterion & (start_time_criterion | end_time_criterion))
+            slot.booked = Appointment.objects.filter(doctor_criterion & (start_time_criterion | end_time_criterion)).exists()
             slots.append(slot)
 
             # Calculating next slot start time
