@@ -11,3 +11,7 @@ class ClinicCard(Component):
         return {
             'clinic': clinic,
         }
+
+
+    class Media:
+        js = 'script.js'
