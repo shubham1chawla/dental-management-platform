@@ -51,3 +51,11 @@ def get_patients_page(request):
 
 def get_add_patient_page(request):
     return render(request, 'add-patient.html')
+
+
+def get_patient_page(request, patient_id: int):
+    context = {
+        'patient': interface.get_patient(patient_id),
+        'appointments': interface.get_patient_appointments(patient_id),
+    }
+    return render(request, 'patient.html', context=context)

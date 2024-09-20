@@ -109,6 +109,7 @@ class Appointment(models.Model):
     date = models.DateField(null=False)
     start_time = models.TimeField(null=False)
     end_time = models.TimeField(null=False)
+    notes = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
