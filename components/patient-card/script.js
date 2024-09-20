@@ -4,16 +4,21 @@
         const appointments = await appointmentsResponse.json();
         
         const dateNode = document.querySelector(`#last-visit-date-${patientId}`);
+        const doctorNode = document.querySelector(`#last-visit-doctor-${patientId}`);
         const proceduresNode = document.querySelector(`#last-visit-procedures-${patientId}`);
         if (!appointments || !appointments.length) {
-            dateNode.innerHTML = `<span class="text-danger">Not visit found</span>`;
-            proceduresNode.innerHTML = `<span class="text-danger">Not visit found</span>`;
+            dateNode.innerHTML = `<span class="text-danger">No visit found</span>`;
+            doctorNode.innerHTML = `<span class="text-danger">No visit found</span>`;
+            proceduresNode.innerHTML = `<span class="text-danger">No visit found</span>`;
             return;
         }
 
         const lastAppointment = appointments[0];
         dateNode.innerHTML = `<span class="text-primary">
             Last Visit Date: ${lastAppointment.date}
+        </span>`;
+        doctorNode.innerHTML = `<span class="text-primary">
+            Last Visit Doctor: ${lastAppointment.doctor.name}
         </span>`;
 
         // Getting appointment procedures
@@ -32,9 +37,9 @@
         const doctorNode = document.querySelector(`#next-visit-doctor-${patientId}`);
         const proceduresNode = document.querySelector(`#next-visit-procedures-${patientId}`);
         if (!appointments || !appointments.length) {
-            dateNode.innerHTML = `<span class="text-danger">Not visit found</span>`;
-            doctorNode.innerHTML = `<span class="text-danger">Not visit found</span>`;
-            proceduresNode.innerHTML = `<span class="text-danger">Not visit found</span>`;
+            dateNode.innerHTML = `<span class="text-danger">No visit found</span>`;
+            doctorNode.innerHTML = `<span class="text-danger">No visit found</span>`;
+            proceduresNode.innerHTML = `<span class="text-danger">No visit found</span>`;
             return;
         }
 
