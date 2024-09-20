@@ -1,0 +1,35 @@
+<div data-id="{{patient.id}}" class="card patient-card h-100">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a class="card-link stretched-link link-primary" href="/patients/{{patient.id}}">
+                {{patient.name}}
+            </a>
+        </h5>
+        <div class="card-text d-flex flex-column">
+            <div class="my-1">
+                <i class="bi bi-cake2-fill"></i>
+                {{patient.dob}}
+            </div>
+            <div class="my-1">
+                <i class="bi bi-calendar-event"></i>
+                <span id="last-visit-date-{{patient.id}}">Loading last visit date...</span>
+            </div>
+            <div class="my-1">
+                <i class="bi bi-pen-fill"></i>
+                <span id="last-visit-procedures-{{patient.id}}">Loading last visit procedures...</span>
+            </div>
+            <div class="my-1">
+                <i class="bi bi-calendar-event"></i>
+                <span id="next-visit-date-{{patient.id}}">Loading next appointment date...</span>
+            </div>
+            <div class="my-1">
+                <i class="bi bi-person-lines-fill"></i>
+                <span id="next-visit-doctor-{{patient.id}}">Loading next appointment doctor...</span>
+            </div>
+            <div class="my-1">
+                <i class="bi bi-pen-fill"></i>
+                <span id="next-visit-procedures-{{patient.id}}">Loading next appointment procedures...</span>
+            </div>
+        </div>
+    </div>
+</div>

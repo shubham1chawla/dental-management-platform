@@ -113,6 +113,14 @@ class Appointment(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
 
 
+class AppointmentProcedure(models.Model):
+    class Meta:
+        unique_together = ('procedure_id', 'appointment_id') 
+
+    appointment_id = models.ForeignKey(Appointment, on_delete=models.CASCADE, null=False)
+    procedure_id = models.ForeignKey(Procedure, on_delete=models.RESTRICT, null=False)
+
+
 class DoctorAppointmentSlot:
     def __init__(self, date: datetime.date, start_time: datetime.time, duration: datetime.timedelta):
         self.date = date

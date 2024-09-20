@@ -1,5 +1,29 @@
 {% extends "base_dashboard.html" %}
 
 {% block content %}
-<p>Patients!</p>
+
+{% component "page-header" %}
+    {% fill "heading" %}
+        <i class="bi bi-person-hearts"></i> Patients
+    {% endfill %}
+    {% fill "description" %}
+        Found {{patients.count}} patients in the system. 
+        Use the <i class="bi bi-plus-circle"></i> button to add a new patient.
+    {% endfill %}
+    {% fill "action" %}
+        <a class="btn btn-primary" style="height: fit-content" role="button" href="/patients/add">
+            <i class="bi bi-plus-circle"></i>
+            Add Patient
+        </a>
+    {% endfill %}
+{% endcomponent %}
+
+<div class="row">
+    {% for patient in patients %}
+        <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+            {% component "patient-card" patient="{{patient}}" / %}
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

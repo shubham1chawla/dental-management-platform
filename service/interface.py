@@ -1,7 +1,8 @@
 from typing import List, Optional, Final
 import datetime
+from enum import StrEnum
 from django.db.models import Q
-from .models import Address, Clinic, Doctor, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot, Procedure, DoctorSpecialty
+from .models import Address, Clinic, Doctor, DoctorSchedule, Patient, Appointment, DoctorAppointmentSlot, Procedure, DoctorSpecialty, AppointmentProcedure
 from . import errors
 
 
@@ -164,5 +165,35 @@ def get_patient(id: int) -> Patient:
     return Patient.objects.get(id=id)
 
 
-def get_procedures() -> List[Procedure]:
-    return Procedure.objects.all().order_by('name')
+class PatientAppointmentMode(StrEnum):
+    ALL = 'all'
+    LAST = 'last'
+    NEXT = 'next'
+
+
+def get_patient_appointments(id: int, mode: Optional[PatientAppointmentMode] = PatientAppointmentMode.ALL) -> List[Appointment]:
+    # Checking if patient exists
+    if not id or not Patient.objects.filter(id=id).exists():
+        raise errors.NoPatientFoundError(id)
+    
+    if mode == PatientAppointmentMode.ALL:
+        return Appointment.objects.filter(patient_id=id).order_by('date', 'start_time')
+    
+    # getting current date
+    date = datetime.date.today()
+
+    if mode == PatientAppointmentMode.LAST:
+        return Appointment.objects.filter(patient_id=id, date__lt=date).order_by('date', 'end_time').reverse()
+    
+    if mode == PatientAppointmentMode.NEXT:
+        return Appointment.objects.filter(patient_id=id, date__gte=date).order_by('date', 'start_time')
+
+    return []
+
+
+def get_procedures(appointment_id: Optional[int] = None) -> List[Procedure]:
+    if not appointment_id:
+        return Procedure.objects.all().order_by('name')
+
+    procedure_ids = AppointmentProcedure.objects.filter(appointment_id=appointment_id).values_list('procedure_id', flat=True).distinct()
+    return [Procedure.objects.get(id=procedure_id) for procedure_id in procedure_ids]

@@ -163,13 +163,53 @@ def get_patients(_):
 
 
 @api_view(['GET'])
-def get_patient(_, patient_id: int) :
+def get_patient(_, patient_id: int):
     patient = interface.get_patient(patient_id)
     serializer = serializers.PatientSerializer(patient)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
+def get_patient_appointments(_, patient_id: int):
+    try:
+        appointments = interface.get_patient_appointments(patient_id)
+    except errors.NoPatientFoundError as error:
+        raise NotFound(error)
+    
+    serializer = serializers.AppointmentSerializer(appointments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_patient_last_appointments(_, patient_id: int):
+    try:
+        appointments = interface.get_patient_appointments(patient_id, interface.PatientAppointmentMode.LAST)
+    except errors.NoPatientFoundError as error:
+        raise NotFound(error)
+    
+    serializer = serializers.AppointmentSerializer(appointments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_patient_next_appointments(_, patient_id: int):
+    try:
+        appointments = interface.get_patient_appointments(patient_id, interface.PatientAppointmentMode.NEXT)
+    except errors.NoPatientFoundError as error:
+        raise NotFound(error)
+    
+    serializer = serializers.AppointmentSerializer(appointments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_procedures(_):
     serializer = serializers.ProcedureSerializer(interface.get_procedures(), many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_appointment_procedures(_, appointment_id: int):
+    procedures = interface.get_procedures(appointment_id)
+    serializer = serializers.ProcedureSerializer(procedures, many=True)
     return Response(serializer.data)

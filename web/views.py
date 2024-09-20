@@ -43,4 +43,7 @@ def get_add_doctor_page(request):
 
 
 def get_patients_page(request):
-    return render(request, 'patients.html')
+    context = {
+        'patients': interface.get_patients,
+    }
+    return render(request, 'patients.html', context=context)

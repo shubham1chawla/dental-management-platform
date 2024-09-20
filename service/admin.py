@@ -1,12 +1,13 @@
 from django.contrib import admin
-from .models import Address, Clinic, Doctor, DoctorSchedule, Procedure, Patient, Appointment, DoctorSpecialty
+from . import models
 
 # Register your models here.
-admin.site.register(Address)
-admin.site.register(Clinic)
-admin.site.register(Procedure)
-admin.site.register(Doctor)
-admin.site.register(DoctorSchedule)
-admin.site.register(Patient)
-admin.site.register(Appointment)
-admin.site.register(DoctorSpecialty)
+admin.site.register(models.Address)
+admin.site.register(models.Clinic)
+admin.site.register(models.Procedure)
+admin.site.register(models.Doctor)
+admin.site.register(models.DoctorSchedule)
+admin.site.register(models.Patient)
+admin.site.register(models.Appointment)
+admin.site.register(models.DoctorSpecialty)
+admin.site.register(models.AppointmentProcedure)
