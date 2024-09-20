@@ -54,8 +54,15 @@ def get_add_patient_page(request):
 
 
 def get_patient_page(request, patient_id: int):
+    next_appointments = interface.get_patient_appointments(patient_id, interface.PatientAppointmentMode.NEXT)
+    next_appointment_procedures = None
+    if next_appointments:
+        next_appointment_procedures = interface.get_procedures(next_appointments[0].id)
+        next_appointment_procedures = ', '.join(map(lambda x: x.name, next_appointment_procedures))
     context = {
         'patient': interface.get_patient(patient_id),
         'appointments': interface.get_patient_appointments(patient_id),
+        'next_appointment': next_appointments[0] if next_appointments else None,
+        'next_appointment_procedures': next_appointment_procedures,
     }
     return render(request, 'patient.html', context=context)

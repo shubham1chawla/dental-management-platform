@@ -55,7 +55,43 @@
     </div>
 </div>
 
-<h4 class="my-4">Visits</h4>
+{% if next_appointment %}
+    <div class="alert alert-success my-4">
+        <h4 class="alert-heading">Upcoming Visit on {{next_appointment.date}}</h4>
+        <div class="card-text d-flex flex-column">
+            <div class="my-1">
+                <i class="bi bi-clock"></i>
+                {{next_appointment.start_time}} - {{next_appointment.end_time}}
+            </div>
+            <div class="my-1">
+                <i class="bi bi-person-lines-fill"></i>
+                <a class="link link-primary" href="/doctors/{{next_appointment.doctor_id.id}}">
+                    {{next_appointment.doctor_id.name}}
+                </a>
+            </div>
+            <div class="my-1">
+                <i class="bi bi-building"></i>
+                <a class="link link-primary" href="/clinics/{{next_appointment.clinic_id.id}}">
+                    {{next_appointment.clinic_id.name}}
+                </a>
+            </div>
+            <div class="my-1">
+                <i class="bi bi-pen-fill"></i>
+                {{next_appointment_procedures}}
+            </div>
+            <div class="my-1">
+                <i class="bi bi-clock"></i>
+                Booked on {{next_appointment.created_at}}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-warning my-4">
+        No upcoming visit found for {{patient.name}}.
+    </div>
+{% endif %}
+
+<h4 class="my-4">All visits</h4>
 <div class="row">
     {% for appointment in appointments.reverse %}
         <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
