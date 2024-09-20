@@ -66,10 +66,8 @@
                 const alert = document.createElement('div');
                 alert.className = 'alert alert-danger mt-4';
                 alert.role = 'alert';
-                alert.innerHTML = 'An error occured while saving the clinic. Please try again later';
-                form.appendChild(alert);
-                console.log(alert);
-    
+                alert.innerHTML = 'An error occured while saving the doctor. Please try again later';
+                form.appendChild(alert);   
                 button.removeAttribute('disabled');
                 return;
             }

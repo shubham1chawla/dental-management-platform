@@ -1,5 +1,5 @@
 (function () {
-    const form = document.querySelector('#add-client-form');
+    const form = document.querySelector('#add-patient-form');
     if (!form) return;
 
     form.addEventListener('submit', (e) => {
@@ -21,30 +21,34 @@
             address[key] = value || null;
         }
 
-        const clinic = {
+        const patient = {
             name: null,
             email: null,
             phone_number: null,
+            dob: null,
+            ssn: null,
+            gender: null,
         };
 
-        for (const key of Object.keys(clinic)) {
+        for (const key of Object.keys(patient)) {
             const { value } = document.querySelector(`#${key}-input`);
             if (!value || !value.length) {
                 document.querySelector(`${key}-error`).innerHTML = 'This is required field!';
                 return;
             }
-            clinic[key] = value;
+            patient[key] = value;
         }
 
-        clinic.address = address;
-        clinic.phone_number = '+1' + clinic.phone_number.replaceAll(' ', '');
+        patient.address = address;
+        patient.ssn = parseInt(patient.ssn);
+        patient.phone_number = '+1' + patient.phone_number.replaceAll(' ', '');
 
         // Loading state
         const button = document.querySelector('#submit-button');
         button.setAttribute('disabled', true);
 
-        fetch('/api/clinics/add', {
-            body: JSON.stringify(clinic),
+        fetch('/api/patients/add', {
+            body: JSON.stringify(patient),
             method: 'POST',
             headers: new Headers({ 'content-type': 'application/json' }),
         }).then((response) => {
@@ -52,12 +56,12 @@
                 const alert = document.createElement('div');
                 alert.className = 'alert alert-danger mt-4';
                 alert.role = 'alert';
-                alert.innerHTML = 'An error occured while saving the clinic. Please try again later';
+                alert.innerHTML = 'An error occured while saving the patient. Please try again later';
                 form.appendChild(alert);
                 button.removeAttribute('disabled');
                 return;
             }
-            window.location.pathname = '/clinics';
+            window.location.pathname = '/patients';
         });
     });
 })();

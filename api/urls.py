@@ -85,6 +85,10 @@ urlpatterns = [
         view=views.get_patient, 
         name='GET Specific Patient'),
     path(
+        'patients/add', 
+        view=views.add_patient, 
+        name='POST Patient'),
+    path(
         'patients/<int:patient_id>/appointments/list', 
         view=views.get_patient_appointments, 
         name="GET Patient's appointments"),

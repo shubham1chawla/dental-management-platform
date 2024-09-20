@@ -169,6 +169,23 @@ def get_patient(_, patient_id: int):
     return Response(serializer.data)
 
 
+@csrf_exempt
+def add_patient(request: HttpRequest) -> HttpResponse:
+    data = json.loads(request.body)
+
+    serializer = serializers.PatientSerializer(data=data)
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+    
+    serializer = serializers.AddressSerializer(data=data['address'])
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+
+    patient = interface.add_patient(**data)
+    serializer = serializers.PatientSerializer(patient, many=False)
+    return HttpResponse(serializer.data)
+
+
 @api_view(['GET'])
 def get_patient_appointments(_, patient_id: int):
     try:

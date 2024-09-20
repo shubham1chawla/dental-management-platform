@@ -165,6 +165,18 @@ def get_patient(id: int) -> Patient:
     return Patient.objects.get(id=id)
 
 
+def add_patient(**kwargs) -> Patient:
+    # Saving the address details
+    address = Address(**kwargs['address'])
+    address.save()
+
+    # Saving the patient details
+    del kwargs['address']
+    patient = Patient(**kwargs, address=address)
+    patient.save()
+    return patient
+
+
 class PatientAppointmentMode(StrEnum):
     ALL = 'all'
     LAST = 'last'

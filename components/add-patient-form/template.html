@@ -1,0 +1,95 @@
+<form id="add-patient-form" class="card p-4">
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Name
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="name-input" class="form-control" type="text" placeholder="Alice Bob" required />
+        <span id="name-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Date of Birth
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="dob-input" class="form-control" type="date" required />
+        <span id="dob-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Last 4 Digits of SSN
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="ssn-input" class="form-control" type="number" placeholder="1234" min="1000" max="9999" required />
+        <span id="ssn-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Gender
+            <span class="text-danger">*required</span>
+        </label>
+        <select id="gender-input" class="form-control" required>
+            <option value="" selected disabled>Select a gender</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+        </select>
+        <span id="gender-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Email Address
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="email-input" class="form-control" type="email" placeholder="alice.bob@gmail.com" required />
+        <span id="email-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Phone Number
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="phone_number-input" class="form-control" type="tel" pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
+            placeholder="888 888 8888" required />
+        <span id="phone_number-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Street Address 1
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="street_address_1-input" class="form-control" type="text" placeholder="1234 N Main Rd" required />
+        <span id="street_address_1-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">Street Address 2</label>
+        <input id="street_address_2-input" class="form-control" type="text" placeholder="Apt 111" />
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            City
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="city-input" class="form-control" type="text" placeholder="Mesa" required />
+        <span id="city-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            State
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="state-input" class="form-control" type="text" placeholder="Arizona" required />
+        <span id="state-error" class="text-danger"></span>
+    </div>
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Zip Code
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="zipcode-input" class="form-control" type="text" placeholder="85202" required />
+        <span id="zipcode-error" class="text-danger"></span>
+    </div>
+    <button id="submit-button" type="submit" class="btn btn-primary">
+        <i class="bi bi-floppy2-fill"></i> Save
+    </button>
+</form>

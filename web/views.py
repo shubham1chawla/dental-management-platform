@@ -47,3 +47,7 @@ def get_patients_page(request):
         'patients': interface.get_patients,
     }
     return render(request, 'patients.html', context=context)
+
+
+def get_add_patient_page(request):
+    return render(request, 'add-patient.html')
