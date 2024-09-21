@@ -39,7 +39,7 @@
         addErrorMessage();
     }
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
         button.setAttribute('disabled', true);
 
@@ -79,9 +79,9 @@
         const clinicId = form.getAttribute('data-id') || null;
         
         if (clinicId) {
-            await updateClinic(clinicId, clinic);
+            updateClinic(clinicId, clinic);
         } else {
-            await addClinic(clinic);
+            addClinic(clinic);
         }
     });
 })();

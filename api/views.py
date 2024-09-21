@@ -122,6 +122,23 @@ def add_doctor(request: HttpRequest):
     return HttpResponse(serializer.data)
 
 
+@csrf_exempt
+def update_doctor(request: HttpRequest, doctor_id: int) -> HttpResponse:
+    data = json.loads(request.body)
+
+    doctor = interface.get_doctor(doctor_id)
+    serializer = serializers.DoctorSerializer(doctor, data=data)
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+    
+    if 'specialties' not in data or not isinstance(data['specialties'], list) or not data['specialties']:
+        return HttpResponseBadRequest()
+    
+    doctor = interface.update_doctor(doctor_id, **data)
+    serializer = serializers.DoctorSerializer(doctor, many=False)
+    return HttpResponse(serializer.data)   
+
+
 @api_view(['GET'])
 def get_doctor_specialties(_, doctor_id: int):
     try:

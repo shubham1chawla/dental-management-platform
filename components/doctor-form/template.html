@@ -1,10 +1,19 @@
-<form id="add-doctor-form" class="card p-4">
+<form data-id="{{doctor.id}}" id="doctor-form" class="card p-4">
     <div class="mb-4">
         <label class="form-label d-flex justify-content-between">
             NPI
             <span class="text-danger">*required</span>
         </label>
-        <input id="npi-input" class="form-control" type="number" min="1000000000" max="9999999999" placeholder="1234567890" required />
+        <input 
+            id="npi-input" 
+            class="form-control" 
+            type="number" 
+            min="1000000000" 
+            max="9999999999" 
+            placeholder="1234567890"
+            value="{{doctor.npi}}" 
+            required 
+        />
         <span id="npi-error" class="text-danger"></span>
     </div>    
     <div class="mb-4">
@@ -12,7 +21,14 @@
             Name
             <span class="text-danger">*required</span>
         </label>
-        <input id="name-input" class="form-control" type="text" placeholder="Great Doctor" required />
+        <input 
+            id="name-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="Great Doctor"
+            value="{{doctor.name}}" 
+            required 
+        />
         <span id="name-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -20,7 +36,14 @@
             Email Address
             <span class="text-danger">*required</span>
         </label>
-        <input id="email-input" class="form-control" type="email" placeholder="great@doctor.com" required />
+        <input 
+            id="email-input" 
+            class="form-control" 
+            type="email" 
+            placeholder="great@doctor.com"
+            value="{{doctor.email}}" 
+            required 
+        />
         <span id="email-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -28,8 +51,17 @@
             Phone Number
             <span class="text-danger">*required</span>
         </label>
-        <input id="phone_number-input" class="form-control" type="tel" pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
-            placeholder="888 888 8888" required />
+        <input 
+            id="phone_number-input" 
+            class="form-control" 
+            type="text" 
+            minlength="12"
+            maxlength="12"
+            pattern="\+1[0-9]{10}"
+            placeholder="+19876543210"
+            value="{{doctor.phone_number}}" 
+            required 
+        />
         <span id="phone_number-error" class="text-danger"></span>
     </div>
     <div class="mb-4">

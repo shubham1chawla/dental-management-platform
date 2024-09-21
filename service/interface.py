@@ -94,6 +94,30 @@ def add_doctor(**kwargs) -> Doctor:
     return doctor
 
 
+def update_doctor(doctor_id: int, **kwargs) -> Doctor:
+    if not doctor_id or not Doctor.objects.filter(id=doctor_id).exists():
+        raise errors.NoDoctorFoundError(doctor_id)
+
+    procedure_ids = kwargs['specialties']
+    del kwargs['specialties']
+
+    # Updating doctor's fields
+    doctor, _ = Doctor.objects.update_or_create(kwargs, id=doctor_id)
+    
+    # Deleting old specialties
+    doctor_specialties = DoctorSpecialty.objects.filter(doctor_id=doctor_id)
+    for specialty in doctor_specialties:
+        specialty.delete()
+
+    # Inserting new specialties
+    for procedure_id in procedure_ids:
+        procedure = Procedure.objects.get(id=procedure_id)
+        specialty = DoctorSpecialty(doctor_id=doctor, procedure_id=procedure)
+        specialty.save()
+
+    return doctor
+
+
 def get_doctor_specialties(id: int) -> List[Procedure]:
     if not id or not Doctor.objects.filter(id=id).exists():
         raise errors.NoDoctorFoundError(id)
