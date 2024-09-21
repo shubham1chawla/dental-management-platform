@@ -4,14 +4,14 @@
 
 {% component "page-header" %}
     {% fill "heading" %}
-        <i class="bi bi-building"></i> Add New Clinic
+        <i class="bi bi-building"></i> Update {{clinic.name}}
     {% endfill %}
     {% fill "description" %}
-        Fill out the new clinic's details.
+        Update the {{clinic.name}}'s details.
         Hit the <i class="bi bi-floppy2-fill"></i> button once you are done.
     {% endfill %}
 {% endcomponent %}
 
-{% component "clinic-form" / %}
+{% component "clinic-form" clinic="{{clinic}}" / %}
 
 {% endblock %}

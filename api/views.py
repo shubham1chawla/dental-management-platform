@@ -41,6 +41,24 @@ def add_clinic(request: HttpRequest) -> HttpResponse:
     return HttpResponse(serializer.data)
 
 
+@csrf_exempt
+def update_clinic(request: HttpRequest, clinic_id: int) -> HttpResponse:
+    data = json.loads(request.body)
+
+    clinic = interface.get_clinic(clinic_id)
+    serializer = serializers.ClinicSerializer(clinic, data=data)
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+    
+    serializer = serializers.AddressSerializer(clinic.address, data=data['address'])
+    if not serializer.is_valid():
+        return HttpResponseBadRequest()
+    
+    clinic = interface.update_clinic(clinic_id, **data)
+    serializer = serializers.ClinicSerializer(clinic, many=False)
+    return HttpResponse(serializer.data)   
+
+
 @api_view(['GET'])
 def get_clinic_doctors(_, clinic_id: int):
     try:

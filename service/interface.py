@@ -44,6 +44,20 @@ def add_clinic(**kwargs) -> Clinic:
     return clinic
 
 
+def update_clinic(clinic_id, **kwargs) -> Clinic:
+    if not clinic_id or not Clinic.objects.filter(id=clinic_id).exists():
+        raise errors.NoClinicFoundError(clinic_id)
+
+    clinic = Clinic.objects.get(id=clinic_id)
+    address = clinic.address
+
+    Address.objects.update_or_create(kwargs['address'], id=address.id)
+    del kwargs['address']
+    Clinic.objects.update_or_create(kwargs, id=clinic_id)
+
+    return Clinic.objects.get(id=clinic_id)
+
+
 def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
     if not clinic_id:
         return Doctor.objects.all()
