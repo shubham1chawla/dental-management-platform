@@ -215,6 +215,20 @@ def add_patient(**kwargs) -> Patient:
     return patient
 
 
+def update_patient(patient_id: int, **kwargs) -> Patient:
+    if not patient_id or not Patient.objects.filter(id=patient_id).exists():
+        raise errors.NoPatientFoundError(patient_id)
+
+    patient = Patient.objects.get(id=patient_id)
+    address = patient.address
+
+    Address.objects.update_or_create(kwargs['address'], id=address.id)
+    del kwargs['address']
+    Patient.objects.update_or_create(kwargs, id=patient_id)
+
+    return Patient.objects.get(id=patient_id)
+
+
 class PatientAppointmentMode(StrEnum):
     ALL = 'all'
     LAST = 'last'

@@ -4,14 +4,14 @@
 
 {% component "page-header" %}
     {% fill "heading" %}
-        <i class="bi bi-person-lines-fill"></i> Update {{doctor.name}}
+        <i class="bi bi-person-hearts"></i> Update {{patient.name}}
     {% endfill %}
     {% fill "description" %}
-        Update {{doctor.name}}'s details.
+        Update {{patient.name}}'s details.
         Hit the <i class="bi bi-floppy2-fill"></i> button once you are done.
     {% endfill %}
 {% endcomponent %}
 
-{% component "doctor-form" doctor="{{doctor}}" / %}
+{% component "patient-form" patient="{{patient}}" / %}
 
 {% endblock %}

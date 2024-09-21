@@ -63,6 +63,13 @@ def get_patients_page(request):
     return render(request, 'patients.html', context=context)
 
 
+def get_update_patient_page(request, patient_id: int):
+    context = {
+        'patient': interface.get_patient(patient_id),
+    }
+    return render(request, 'update-patient.html', context=context)
+
+
 def get_add_patient_page(request):
     return render(request, 'add-patient.html')
 

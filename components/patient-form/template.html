@@ -1,10 +1,17 @@
-<form id="add-patient-form" class="card p-4">
+<form data-id="{{patient.id}}" id="patient-form" class="card p-4">
     <div class="mb-4">
         <label class="form-label d-flex justify-content-between">
             Name
             <span class="text-danger">*required</span>
         </label>
-        <input id="name-input" class="form-control" type="text" placeholder="Alice Bob" required />
+        <input 
+            id="name-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="Alice Bob" 
+            value="{{patient.name}}"
+            required 
+        />
         <span id="name-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -12,7 +19,13 @@
             Date of Birth
             <span class="text-danger">*required</span>
         </label>
-        <input id="dob-input" class="form-control" type="date" required />
+        <input 
+            id="dob-input" 
+            class="form-control" 
+            type="date" 
+            value="{{patient.dob|date:'Y-m-d'}}"
+            required 
+        />
         <span id="dob-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -20,7 +33,16 @@
             Last 4 Digits of SSN
             <span class="text-danger">*required</span>
         </label>
-        <input id="ssn-input" class="form-control" type="number" placeholder="1234" min="1000" max="9999" required />
+        <input 
+            id="ssn-input" 
+            class="form-control" 
+            type="number" 
+            placeholder="1234" 
+            min="1000" 
+            max="9999" 
+            value="{{patient.ssn}}"
+            required 
+        />
         <span id="ssn-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -29,10 +51,10 @@
             <span class="text-danger">*required</span>
         </label>
         <select id="gender-input" class="form-control" required>
-            <option value="" selected disabled>Select a gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="O">Other</option>
+            <option value="" disabled>Select a gender</option>
+            <option value="M" {% if patient.gender == 'M' %}selected{% endif %}>Male</option>
+            <option value="F" {% if patient.gender == 'F' %}selected{% endif %}>Female</option>
+            <option value="O" {% if patient.gender == 'O' %}selected{% endif %}>Other</option>
         </select>
         <span id="gender-error" class="text-danger"></span>
     </div>
@@ -41,7 +63,14 @@
             Email Address
             <span class="text-danger">*required</span>
         </label>
-        <input id="email-input" class="form-control" type="email" placeholder="alice.bob@gmail.com" required />
+        <input 
+            id="email-input" 
+            class="form-control" 
+            type="email" 
+            placeholder="alice.bob@gmail.com" 
+            value="{{patient.email}}"
+            required 
+        />
         <span id="email-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -49,8 +78,17 @@
             Phone Number
             <span class="text-danger">*required</span>
         </label>
-        <input id="phone_number-input" class="form-control" type="tel" pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
-            placeholder="888 888 8888" required />
+        <input 
+            id="phone_number-input" 
+            class="form-control" 
+            type="text" 
+            minlength="12"
+            maxlength="12"
+            pattern="\+1[0-9]{10}"
+            placeholder="+19876543210"
+            value="{{patient.phone_number}}"
+            required 
+        />
         <span id="phone_number-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -58,19 +96,41 @@
             Street Address 1
             <span class="text-danger">*required</span>
         </label>
-        <input id="street_address_1-input" class="form-control" type="text" placeholder="1234 N Main Rd" required />
+        <input 
+            id="street_address_1-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="1234 N Main Rd" 
+            value="{{patient.address.street_address_1}}"
+            required 
+        />
         <span id="street_address_1-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
         <label class="form-label">Street Address 2</label>
-        <input id="street_address_2-input" class="form-control" type="text" placeholder="Apt 111" />
+        <input 
+            id="street_address_2-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="Apt 111" 
+            {% if patient.address.street_address_2 %}
+                value="{{patient.address.street_address_2}}" 
+            {% endif %}
+        />
     </div>
     <div class="mb-4">
         <label class="form-label d-flex justify-content-between">
             City
             <span class="text-danger">*required</span>
         </label>
-        <input id="city-input" class="form-control" type="text" placeholder="Mesa" required />
+        <input 
+            id="city-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="Mesa" 
+            value="{{patient.address.city}}"
+            required 
+        />
         <span id="city-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -78,7 +138,14 @@
             State
             <span class="text-danger">*required</span>
         </label>
-        <input id="state-input" class="form-control" type="text" placeholder="Arizona" required />
+        <input 
+            id="state-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="Arizona" 
+            value="{{patient.address.state}}"
+            required 
+        />
         <span id="state-error" class="text-danger"></span>
     </div>
     <div class="mb-4">
@@ -86,7 +153,14 @@
             Zip Code
             <span class="text-danger">*required</span>
         </label>
-        <input id="zipcode-input" class="form-control" type="text" placeholder="85202" required />
+        <input 
+            id="zipcode-input" 
+            class="form-control" 
+            type="text" 
+            placeholder="85202" 
+            value="{{patient.address.zipcode}}"
+            required 
+        />
         <span id="zipcode-error" class="text-danger"></span>
     </div>
     <button id="submit-button" type="submit" class="btn btn-primary">
