@@ -1,0 +1,17 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+
+{% component "page-header" %}
+    {% fill "heading" %}
+        <i class="bi bi-calendar-plus"></i> Schedule Appointment
+    {% endfill %}
+    {% fill "description" %}
+        Schedule an appointment for {{patient.name}}.
+        Hit the <i class="bi bi-floppy2-fill"></i> button once you are done.
+    {% endfill %}
+{% endcomponent %}
+
+{% component "schedule-form" patient="{{patient}}" procedures="{{procedures}}" / %}
+
+{% endblock %}

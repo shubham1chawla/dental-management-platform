@@ -62,7 +62,7 @@ def update_clinic(request: HttpRequest, clinic_id: int) -> HttpResponse:
 @api_view(['GET'])
 def get_clinic_doctors(_, clinic_id: int):
     try:
-        doctors = interface.get_doctors(clinic_id)
+        doctors = interface.get_doctors(clinic_id=clinic_id)
     except errors.NoClinicFoundError as error:
         raise NotFound(error)
 
@@ -78,6 +78,13 @@ def get_clinic_doctor_schedules(_, clinic_id: int, doctor_id: int):
         raise NotFound(error)
 
     serializer = serializers.DoctorScheduleSerializer(schedule, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_clinic_doctor_appointment_slots(_, clinic_id: int, doctor_id: int, schedule_date: datetime.date):
+    slots = interface.get_appointment_slots(doctor_id, clinic_id, schedule_date)
+    serializer = serializers.DoctorAppointmentSlotSerializer(slots, many=True)
     return Response(serializer.data)
 
 
@@ -153,7 +160,7 @@ def get_doctor_specialties(_, doctor_id: int):
 @api_view(['GET'])
 def get_doctor_clinics(_, doctor_id: int):
     try:
-        clinics = interface.get_clinics(doctor_id)
+        clinics = interface.get_clinics(doctor_id=doctor_id)
     except errors.NoDoctorFoundError as error:
         raise NotFound(error)
 
@@ -169,24 +176,6 @@ def get_doctor_patients(_, doctor_id: int):
         raise NotFound(error)
 
     serializer = serializers.PatientSerializer(patients, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def get_doctor_schedules(_, doctor_id: int):
-    try:
-        schedule = interface.get_schedules(doctor_id)
-    except errors.NoDoctorFoundError as error:
-        raise NotFound(error)
-
-    serializer = serializers.DoctorScheduleSerializer(schedule, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def get_doctor_appointment_slots(_, doctor_id: int, schedule_date: datetime.date):
-    slots = interface.get_doctor_appointment_slots(doctor_id, schedule_date)
-    serializer = serializers.DoctorAppointmentSlotSerializer(slots, many=True)
     return Response(serializer.data)
 
 
@@ -272,9 +261,43 @@ def get_patient_next_appointments(_, patient_id: int):
     return Response(serializer.data)
 
 
+@csrf_exempt
+def add_patient_appointment(request: HttpRequest, patient_id: int):
+    data = json.loads(request.body)
+    data['patient_id'] = patient_id
+
+    serializer = serializers.AppointmentSerializer(data=data)
+    if not serializer.is_valid():
+        print(serializer.errors)
+        return HttpResponseBadRequest()
+    
+    data['patient_id'] = interface.get_patient(patient_id)
+    data['procedure_id'] = interface.get_procedure(data['procedure_id'])
+    data['clinic_id'] = interface.get_clinic(data['clinic_id'])
+    data['doctor_id'] = interface.get_doctor(data['doctor_id'])
+
+    appointment = interface.add_appointment(**data)
+    serializer = serializers.AppointmentSerializer(appointment, many=False)
+    return HttpResponse(serializer.data)
+
+
 @api_view(['GET'])
 def get_procedures(_):
     serializer = serializers.ProcedureSerializer(interface.get_procedures(), many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_procedure_clinics(_, procedure_id: int):
+    clinics = interface.get_clinics(procedure_id=procedure_id)
+    serializer = serializers.ClinicSerializer(clinics, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_procedure_clinic_doctors(_, procedure_id: int, clinic_id: int):
+    doctors = interface.get_doctors(procedure_id=procedure_id, clinic_id=clinic_id)
+    serializer = serializers.DoctorSerializer(doctors, many=True)
     return Response(serializer.data)
 
 

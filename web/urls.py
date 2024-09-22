@@ -14,6 +14,7 @@ urlpatterns = [
     path('patients/', view=views.get_patients_page, name='Patients Page'),
     path('patients/add', view=views.get_add_patient_page, name='Add Patient Page'),
     path('patients/<int:patient_id>', view=views.get_patient_page, name='Patient Page'),
-    path('patients/<int:patient_id>/update', view=views.get_update_patient_page, name='Uodate Patient Page'),
+    path('patients/<int:patient_id>/update', view=views.get_update_patient_page, name='Update Patient Page'),
+    path('patients/<int:patient_id>/schedule', view=views.get_schedule_page, name='Schedule Page'),
     path('', view=RedirectView.as_view(permanent=False, url='clinics/')),
 ]

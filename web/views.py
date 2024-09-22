@@ -12,7 +12,7 @@ def get_clinics_page(request):
 def get_clinic_page(request, clinic_id: int):
     context = {
         'clinic': interface.get_clinic(clinic_id),
-        'doctors': interface.get_doctors(clinic_id),
+        'doctors': interface.get_doctors(clinic_id=clinic_id),
     }
     return render(request, 'clinic.html', context=context)
 
@@ -38,7 +38,7 @@ def get_doctors_page(request):
 def get_doctor_page(request, doctor_id: int):
     context = {
         'doctor': interface.get_doctor(doctor_id),
-        'clinics': interface.get_clinics(doctor_id),
+        'clinics': interface.get_clinics(doctor_id=doctor_id),
         'specialties': ', '.join(map(lambda x: x.name, interface.get_doctor_specialties(doctor_id))),
         'patients': interface.get_patients(doctor_id=doctor_id),
     }
@@ -87,3 +87,11 @@ def get_patient_page(request, patient_id: int):
         'next_appointment_procedures': next_appointment_procedures,
     }
     return render(request, 'patient.html', context=context)
+
+
+def get_schedule_page(request, patient_id: int):
+    context = {
+        'patient': interface.get_patient(patient_id),
+        'procedures': interface.get_procedures(),
+    }
+    return render(request, 'schedule.html', context=context)

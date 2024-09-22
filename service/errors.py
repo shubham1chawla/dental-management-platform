@@ -11,3 +11,8 @@ class NoDoctorFoundError(RuntimeError):
 class NoPatientFoundError(RuntimeError):
     def __init__(self, patient_id: int):
         super().__init__(f'No patient associated with id {patient_id}')
+
+
+class NoProcedureFoundError(RuntimeError):
+    def __init__(self, procedure_id: int):
+        super().__init__(f'No procedure associated with id {procedure_id}')

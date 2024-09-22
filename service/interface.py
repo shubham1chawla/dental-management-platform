@@ -13,16 +13,31 @@ DEFAULT_SLOT_DURATION: Final[datetime.timedelta] = datetime.timedelta(minutes=55
 DEFAULT_SLOT_BUFFER: Final[datetime.timedelta] = datetime.timedelta(minutes=5)
 
 
-def get_clinics(doctor_id: Optional[int] = None) -> List[Clinic]:
-    if not doctor_id:
-        return Clinic.objects.all()
+def get_clinics(**kwargs) -> List[Clinic]:
+
+    # Filtering clinics based on doctor
+    if 'doctor_id' in kwargs:
+        doctor_id = kwargs['doctor_id']
     
-    # Checking if doctor exists
-    if not Doctor.objects.filter(id=doctor_id).exists():
-        raise errors.NoDoctorFoundError(doctor_id)
-    
-    clinic_ids = DoctorSchedule.objects.filter(doctor_id=doctor_id).values_list('clinic_id', flat=True).distinct()
-    return [get_clinic(clinic_id) for clinic_id in clinic_ids]
+        # Checking if doctor exists
+        if not Doctor.objects.filter(id=doctor_id).exists():
+            raise errors.NoDoctorFoundError(doctor_id)
+        
+        clinic_ids = DoctorSchedule.objects.filter(doctor_id=doctor_id).values_list('clinic_id', flat=True).distinct()
+        return [get_clinic(clinic_id) for clinic_id in clinic_ids]
+
+    # Filtering clinics based on procedure
+    if 'procedure_id' in kwargs:
+        procedure_id = kwargs['procedure_id']
+
+        # Fetching doctors performing this procedure
+        doctors = get_doctors(procedure_id=procedure_id)
+        doctor_ids = [doctor.id for doctor in doctors]
+
+        clinic_ids = DoctorSchedule.objects.filter(doctor_id__in=doctor_ids).values_list('clinic_id', flat=True).distinct()
+        return [get_clinic(clinic_id) for clinic_id in clinic_ids]
+
+    return Clinic.objects.all()
 
 
 def get_clinic(id: int) -> Clinic:
@@ -58,16 +73,39 @@ def update_clinic(clinic_id, **kwargs) -> Clinic:
     return Clinic.objects.get(id=clinic_id)
 
 
-def get_doctors(clinic_id: Optional[int] = None) -> List[Doctor]:
-    if not clinic_id:
-        return Doctor.objects.all()
+def get_doctors(**kwargs) -> List[Doctor]:
+    clinic_id = procedure_id = None
+    if 'clinic_id' in kwargs:
+        clinic_id = kwargs['clinic_id']
+
+        # Checking if clinic exists
+        if not Clinic.objects.filter(id=clinic_id).exists():
+            raise errors.NoClinicFoundError(clinic_id)
     
-    # Checking if clinic exists
-    if not Clinic.objects.filter(id=clinic_id).exists():
-        raise errors.NoClinicFoundError(clinic_id)
+    if 'procedure_id' in kwargs:
+        procedure_id = kwargs['procedure_id']
+
+        # Checking if procedure exists
+        if not Procedure.objects.filter(id=procedure_id).exists():
+            raise errors.NoProcedureFoundError(procedure_id)
     
-    doctor_ids = DoctorSchedule.objects.filter(clinic_id=clinic_id).values_list('doctor_id', flat=True).distinct()
-    return [get_doctor(doctor_id) for doctor_id in doctor_ids]
+    # Filtering doctors based on clinic and procedure
+    if clinic_id and procedure_id:
+        doctor_ids = DoctorSchedule.objects.filter(clinic_id=clinic_id).values_list('doctor_id', flat=True).distinct()
+        doctor_ids = DoctorSpecialty.objects.filter(procedure_id=procedure_id, doctor_id__in=doctor_ids).values_list('doctor_id', flat=True).distinct()
+        return [get_doctor(doctor_id) for doctor_id in doctor_ids]
+
+    # Filtering doctors based on clinic
+    if clinic_id:
+        doctor_ids = DoctorSchedule.objects.filter(clinic_id=clinic_id).values_list('doctor_id', flat=True).distinct()
+        return [get_doctor(doctor_id) for doctor_id in doctor_ids]
+
+    # Filtering doctors based on procedure
+    if procedure_id:
+        doctor_ids = DoctorSpecialty.objects.filter(procedure_id=procedure_id).values_list('doctor_id', flat=True).distinct()
+        return [get_doctor(doctor_id) for doctor_id in doctor_ids]
+
+    return Doctor.objects.all()
 
 
 def get_doctor(id: int) -> Doctor:
@@ -150,8 +188,8 @@ def get_schedules(doctor_id: int, **kwargs) -> List[DoctorSchedule]:
     return DoctorSchedule.objects.filter(**filters).order_by('start_time')
 
 
-def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[DoctorAppointmentSlot]:
-    schedules = get_schedules(doctor_id, date=date)
+def get_appointment_slots(doctor_id: int, clinic_id: int, date: datetime.date) -> List[DoctorAppointmentSlot]:
+    schedules = get_schedules(doctor_id, clinic_id=clinic_id, date=date)
     if not schedules:
         return []
 
@@ -173,6 +211,19 @@ def get_doctor_appointment_slots(doctor_id: int, date: datetime.date) -> List[Do
             time = (datetime.datetime.combine(date, slot.end_time) + DEFAULT_SLOT_BUFFER).time()
 
     return slots
+
+
+def add_appointment(**kwargs) -> Appointment:
+    procedure = kwargs['procedure_id']
+    del kwargs['procedure_id']
+
+    appointment = Appointment(**kwargs)
+    appointment.save()
+
+    appointment_procedure = AppointmentProcedure(appointment_id=appointment, procedure_id=procedure)
+    appointment_procedure.save()
+
+    return appointment
 
 
 def get_patients(**kwargs) -> List[Patient]:
@@ -261,3 +312,10 @@ def get_procedures(appointment_id: Optional[int] = None) -> List[Procedure]:
 
     procedure_ids = AppointmentProcedure.objects.filter(appointment_id=appointment_id).values_list('procedure_id', flat=True).distinct()
     return [Procedure.objects.get(id=procedure_id) for procedure_id in procedure_ids]
+
+
+def get_procedure(id: int) -> Procedure:
+    if not id or not Procedure.objects.filter(id=id).exists():
+        raise errors.NoProcedureFoundError(id)
+    
+    return Procedure.objects.get(id=id)

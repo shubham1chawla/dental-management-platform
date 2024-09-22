@@ -45,6 +45,10 @@ urlpatterns = [
         view=views.get_clinic_doctor_schedules, 
         name="GET Clinic's Doctor's schedules"),
     path(
+        'clinics/<int:clinic_id>/doctors/<int:doctor_id>/schedules/<date:schedule_date>/slots/list', 
+        view=views.get_clinic_doctor_appointment_slots, 
+        name="GET Clinic's Doctor's schedules"),
+    path(
         'clinics/<int:clinic_id>/patients/list', 
         view=views.get_clinic_patients, 
         name="GET Clinic's Patients"),
@@ -77,14 +81,6 @@ urlpatterns = [
         view=views.get_doctor_patients, 
         name="GET Doctor's Patients"),
     path(
-        'doctors/<int:doctor_id>/schedules/list', 
-        view=views.get_doctor_schedules, 
-        name="GET Doctor's schedules"),
-    path(
-        'doctors/<int:doctor_id>/schedules/<date:schedule_date>/slots/list', 
-        view=views.get_doctor_appointment_slots, 
-        name="GET Doctor's appointment slots"),
-    path(
         'patients/list', 
         view=views.get_patients, 
         name='GET Patients'),
@@ -113,9 +109,21 @@ urlpatterns = [
         view=views.get_patient_next_appointments, 
         name="GET Patient's next appointments"),
     path(
+        'patients/<int:patient_id>/appointments/add', 
+        view=views.add_patient_appointment, 
+        name="POST Patient Appointment"),
+    path(
         'procedures/list', 
         view=views.get_procedures, 
         name='GET Procedures'),
+    path(
+        'procedures/<int:procedure_id>/clinics/list', 
+        view=views.get_procedure_clinics, 
+        name='GET Clinics by Procedure'),
+    path(
+        'procedures/<int:procedure_id>/clinics/<int:clinic_id>/doctors/list', 
+        view=views.get_procedure_clinic_doctors, 
+        name='GET Doctors by Procedure and Clinic'),
     path(
         'appointments/<int:appointment_id>/procedures/list', 
         view=views.get_appointment_procedures, 

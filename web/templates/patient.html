@@ -91,7 +91,13 @@
     </div>
 {% endif %}
 
-<h4 class="my-4">All visits</h4>
+<div class="my-4 d-flex justify-content-between align-items-center">
+    <h4>All visits</h4>
+    <a class="btn btn-secondary" href="/patients/{{patient.id}}/schedule">
+        <i class="bi bi-calendar-plus"></i>
+        Schedule
+    </a>
+</div>
 <div class="row">
     {% for appointment in appointments.reverse %}
         <div class="col-sm-12 col-md-6 col-lg-4 mb-4">

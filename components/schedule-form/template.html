@@ -1,0 +1,82 @@
+<form data-id="{{patient.id}}" id="schedule-form" class="card p-4">
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            What procedure do you want?
+            <span class="text-danger">*required</span>
+        </label>
+        <select id="procedure-select" class="form-control" required>
+            <option value="" selected disabled>Select a procedure</option>
+            {% for procedure in procedures %}
+                <option value="{{procedure.id}}">{{procedure.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Selecting clinic select field -->
+    <div id="clinic-field" class="mb-4 visually-hidden">
+        <label class="form-label d-flex justify-content-between">
+            Which clinic do you want to visit?
+            <span class="text-danger">*required</span>
+        </label>
+        <select id="clinic-select" class="form-control" required>
+            <option value="" selected disabled>Select a clinic</option>
+            <!-- Loading clinics from API call -->
+        </select>
+        <span id="loading" class="text-warning">
+            Looking for suitable clinics...
+        </span>
+        <span id="unavailable" class="text-danger visually-hidden">
+            No clinics found performing this procedure!
+        </span>
+    </div>
+
+    <!-- Selecting doctor select field -->
+    <div id="doctor-field" class="mb-4 visually-hidden">
+        <label class="form-label d-flex justify-content-between">
+            Which doctor do you want to see?
+            <span class="text-danger">*required</span>
+        </label>
+        <select id="doctor-select" class="form-control" required>
+            <option value="" selected disabled>Select a doctor</option>
+            <!-- Loading doctors from API call -->
+        </select>
+        <span id="loading" class="text-warning">
+            Looking for available doctors...
+        </span>
+        <span id="unavailable" class="text-danger visually-hidden">
+            No doctors found performing this procedure!
+        </span>
+    </div>
+
+    <!-- Selecting date field -->
+    <div id="date-field" class="mb-4 visually-hidden">
+        <label class="form-label d-flex justify-content-between">
+            When do you want to visit?
+            <span class="text-danger">*required</span>
+        </label>
+        <input id="date-input" class="form-control" type="date" min="{% now 'Y-m-d' %}" required />
+    </div>
+
+    <!-- Selecting appointment slot field -->
+    <div id="slot-field" class="mb-4 visually-hidden">
+        <label class="form-label d-flex justify-content-between">
+            What's your preferred appointment slot?
+            <span class="text-danger">*required</span>
+        </label>
+        <select id="slot-select" class="form-control" required>
+            <option value="" selected disabled>Select a slot</option>
+            <!-- Loading slots from API call -->
+        </select>
+        <span id="loading" class="text-warning">
+            Looking for available appointment slots...
+        </span>
+        <span id="unavailable" class="text-danger visually-hidden">
+            No slots found for the selected date!
+        </span>
+    </div>
+
+    <!-- Submit button -->
+    <button id="submit-button" type="submit" class="btn btn-primary visually-hidden" disabled>
+        <i class="bi bi-floppy2-fill"></i> Save
+    </button>
+</form>
