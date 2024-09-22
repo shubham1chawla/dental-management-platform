@@ -8,10 +8,10 @@ class AffiliationForm(Component):
     template_name = 'template.html'
 
 
-    def get_context_data(self, clinic: Clinic, doctors: List[Doctor], doctor: Optional[Doctor] = None):
+    def get_context_data(self, clinic: Clinic, doctors: Optional[List[Doctor]] = None, doctor: Optional[Doctor] = None):
         return {
             'clinic': clinic,
-            'doctors': doctor,
+            'doctors': doctors if doctors else [],
             'doctor': doctor,
         }
     

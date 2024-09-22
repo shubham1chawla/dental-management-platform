@@ -51,14 +51,41 @@
         }
     }
 
+    const resetFields = () => {
+        for (let i = 0; i < 5; i++) {
+            disableFields(i);
+        }
+    }
+
     const enableRemoveOperation = (weekday) => {
         const removeOperation = form.querySelector(`#schedule-${weekday}-operation-remove`);
         removeOperation.removeAttribute('disabled');
     }
 
+    const resetRemoveOperations = () => {
+        for (let i = 0; i < 5; i++) {
+            const removeOperation = form.querySelector(`#schedule-${i}-operation-remove`);
+            removeOperation.setAttribute('disabled', true);
+        }
+    }
+
     const disableAddEditOperation = (weekday) => {
         const addEditOperation = form.querySelector(`#schedule-${weekday}-operation-add-edit`);
         addEditOperation.setAttribute('disabled', true);
+    }
+
+    const resetAddEditOperations = () => {
+        for (let i = 0; i < 5; i++) {
+            const addEditOperation = form.querySelector(`#schedule-${i}-operation-add-edit`);
+            addEditOperation.removeAttribute('disabled');
+        }
+    }
+
+    const resetUnchangedOperations = () => {
+        for (let i = 0; i < 5; i++) {
+            const unchangedOperation = form.querySelector(`#schedule-${i}-operation-unchanged`);
+            unchangedOperation.checked = true;
+        }
     }
 
     const showRemoveAlert = (weekday) => {
@@ -75,6 +102,14 @@
         const badgeNode = form.querySelector(`#schedule-${weekday}-badge`);
         badgeNode.classList.add(classes);
         badgeNode.innerHTML = text;
+    }
+
+    const resetBadge = () => {
+        for (let i = 0; i < 5; i++) {
+            const badgeNode = form.querySelector(`#schedule-${i}-badge`);
+            badgeNode.setAttribute('class', 'badge');
+            badgeNode.innerHTML = '';
+        }
     }
 
     const setSchedule = (weekday, schedule) => {
@@ -142,6 +177,14 @@
         setDoctorSchedule();
     } else {
         hideLoadingSchedule();
+        doctorSelect.addEventListener('change', () => {
+            resetBadge();
+            resetRemoveOperations();
+            resetAddEditOperations();
+            resetUnchangedOperations();
+            resetFields();
+            setDoctorSchedule();
+        });
     }
 
     // Setting operations interactivity

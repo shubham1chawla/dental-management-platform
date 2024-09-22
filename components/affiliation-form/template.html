@@ -15,7 +15,7 @@
             {% else %}
                 <option value="" disabled selected>Select a doctor</option>
                 {% for doctor in doctors %}
-                    <option value="{{doctor.id}}" selected>{{doctor.name}}</option>
+                    <option value="{{doctor.id}}">{{doctor.name}}</option>
                 {% endfor %}
             {% endif %}
         </select>

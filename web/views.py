@@ -34,10 +34,17 @@ def get_add_clinic_page(request):
     return render(request, 'add-clinic.html')
 
 
-def get_update_affiliations_page(request, clinic_id: int, doctor_id: int):
+def get_add_affiliations_page(request, clinic_id: int):
     context = {
         'clinic': interface.get_clinic(clinic_id),
         'doctors': interface.get_doctors(),
+    }
+    return render(request, 'add-affiliations.html', context=context)
+
+
+def get_update_affiliations_page(request, clinic_id: int, doctor_id: int):
+    context = {
+        'clinic': interface.get_clinic(clinic_id),
         'doctor': interface.get_doctor(doctor_id),
     }
     return render(request, 'update-affiliations.html', context=context)

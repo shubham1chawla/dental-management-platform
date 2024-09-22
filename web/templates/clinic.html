@@ -33,7 +33,12 @@
     </div>
 </div>
 
-<h4 class="my-4">Affiliated Doctors</h4>
+<div class="my-4 d-flex justify-content-between align-items-center">
+    <h4>Affiliated Doctors</h4>
+    <a class="btn btn-secondary" href="/clinics/{{clinic.id}}/affiliations/add">
+        Add Affiliation
+    </a>
+</div>
 <div class="row">
     {% for doctor in doctors %}
         <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
