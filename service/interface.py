@@ -188,6 +188,53 @@ def get_schedules(doctor_id: int, **kwargs) -> List[DoctorSchedule]:
     return DoctorSchedule.objects.filter(**filters).order_by('start_time')
 
 
+def get_schedule(id: int) -> DoctorSchedule:
+    if not id or not DoctorSchedule.objects.filter(id=id).exists():
+        raise errors.NoDoctorScheduleFoundError(id)
+    
+    return DoctorSchedule.objects.get(id=id)
+
+
+def add_schedule(**kwargs) -> DoctorSchedule:
+    # Checking if doctor already in another clinic
+    doctor = kwargs['doctor_id']
+    weekday = kwargs['weekday']
+    if DoctorSchedule.objects.filter(doctor_id=doctor, weekday=weekday).exists():
+        raise errors.DoctorUnavailableError(doctor.id, weekday)
+
+    address = Address(**kwargs['office_address'])
+    address.save()
+    del kwargs['office_address']
+
+    schedule = DoctorSchedule(office_address=address, **kwargs)
+    schedule.save()
+    return schedule
+
+
+def update_schedule(id: int, **kwargs) -> DoctorSchedule:
+    if not id or not DoctorSchedule.objects.filter(id=id).exists():
+        raise errors.NoDoctorScheduleFoundError(id)
+    
+    schedule = DoctorSchedule.objects.get(id=id)
+    address = schedule.office_address
+
+    Address.objects.update_or_create(kwargs['office_address'], id=address.id)
+    del kwargs['office_address']
+    DoctorSchedule.objects.update_or_create(kwargs, id=id)
+
+    return DoctorSchedule.objects.get(id=id)
+
+
+def remove_schedule(id: int):
+    if not id or not DoctorSchedule.objects.filter(id=id).exists():
+        raise errors.NoDoctorScheduleFoundError(id)
+    
+    schedule = DoctorSchedule.objects.get(id=id)
+    office_address = schedule.office_address
+    schedule.delete()
+    office_address.delete()
+
+
 def get_appointment_slots(doctor_id: int, clinic_id: int, date: datetime.date) -> List[DoctorAppointmentSlot]:
     schedules = get_schedules(doctor_id, clinic_id=clinic_id, date=date)
     if not schedules:

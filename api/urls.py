@@ -45,6 +45,18 @@ urlpatterns = [
         view=views.get_clinic_doctor_schedules, 
         name="GET Clinic's Doctor's schedules"),
     path(
+        'clinics/<int:clinic_id>/doctors/<int:doctor_id>/schedules/add', 
+        view=views.add_schedule, 
+        name="POST Clinic's Doctor's schedule"),
+    path(
+        'clinics/<int:clinic_id>/doctors/<int:doctor_id>/schedules/<int:schedule_id>/update', 
+        view=views.update_schedule, 
+        name="PUT Clinic's Doctor's schedule"),
+    path(
+        'clinics/<int:clinic_id>/doctors/<int:doctor_id>/schedules/<int:schedule_id>/remove', 
+        view=views.remove_schedule, 
+        name="DELETE Clinic's Doctor's schedule"),
+    path(
         'clinics/<int:clinic_id>/doctors/<int:doctor_id>/schedules/<date:schedule_date>/slots/list', 
         view=views.get_clinic_doctor_appointment_slots, 
         name="GET Clinic's Doctor's schedules"),
@@ -80,6 +92,10 @@ urlpatterns = [
         'doctors/<int:doctor_id>/patients/list', 
         view=views.get_doctor_patients, 
         name="GET Doctor's Patients"),
+    path(
+        'doctors/<int:doctor_id>/schedules/list', 
+        view=views.get_doctor_schedules, 
+        name="GET Doctor's Clinics"),
     path(
         'patients/list', 
         view=views.get_patients, 

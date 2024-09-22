@@ -1,0 +1,195 @@
+<form data-id="{{clinic.id}}" id="affiliation-form" class="card p-4">
+    <div class="mb-4">
+        <label class="form-label d-flex justify-content-between">
+            Doctor
+            <span class="text-danger">*required</span>
+        </label>
+        <select 
+            id="doctor-select"
+            class="form-control"
+            {% if doctor %}disabled{% endif %}
+            required
+        >
+            {% if doctor %}
+                <option value="{{doctor.id}}" selected>{{doctor.name}}</option>
+            {% else %}
+                <option value="" disabled selected>Select a doctor</option>
+                {% for doctor in doctors %}
+                    <option value="{{doctor.id}}" selected>{{doctor.name}}</option>
+                {% endfor %}
+            {% endif %}
+        </select>
+        <span id="name-error" class="text-danger"></span>
+    </div>
+
+    <span id="loading" class="text-warning visually-hidden">Loading schedule...</span>
+
+    <!-- Weekday schedule -->
+    {% for i in 5|get_range %}
+        <div id="schedule-{{i}}" class="my-4 visually-hidden">
+            <div class="mb-4 d-flex justify-content-between">
+                <h5>
+                    {% if i == 0 %}
+                        Monday
+                    {% elif i == 1 %}
+                        Tuesday
+                    {% elif i == 2 %}
+                        Wednesday
+                    {% elif i == 3 %}
+                        Thursday
+                    {% else %}
+                        Friday
+                    {% endif %}
+                    <span id="schedule-{{i}}-badge" class="badge"></span>
+                </h5>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input 
+                            type="radio" 
+                            id="schedule-{{i}}-operation-unchanged"
+                            name="schedule-{{i}}-operation" 
+                            class="form-check-input" 
+                            checked
+                        />
+                        <label class="form-check-label" for="schedule-{{i}}-operation-unchanged">
+                            Unchanged
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input 
+                            type="radio" 
+                            id="schedule-{{i}}-operation-add-edit" 
+                            name="schedule-{{i}}-operation" 
+                            class="form-check-input" 
+                        />
+                        <label class="form-check-label" for="schedule-{{i}}-operation-add-edit">
+                            Add/Edit
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input 
+                            type="radio" 
+                            id="schedule-{{i}}-operation-remove"
+                            name="schedule-{{i}}-operation" 
+                            class="form-check-input" 
+                            disabled
+                        />
+                        <label class="form-check-label" for="schedule-{{i}}-operation-remove">
+                            Remove
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- To Be Deleted Alert -->
+            <div id="schedule-{{i}}-alert-remove" class="alert alert-danger visually-hidden">
+                You have marked this schedule to be deleted.
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label d-flex justify-content-between">
+                    Street Address 1
+                    <span class="text-danger">*required</span>
+                </label>
+                <input 
+                    id="street_address_1-input" 
+                    class="form-control" 
+                    type="text" 
+                    placeholder="1234 N Main Rd" 
+                    disabled
+                    required 
+                />
+                <span id="street_address_1-error" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Street Address 2</label>
+                <input 
+                    id="street_address_2-input" 
+                    class="form-control" 
+                    type="text" 
+                    placeholder="Apt 111" 
+                    disabled
+                />
+            </div>
+            <div class="mb-4">
+                <label class="form-label d-flex justify-content-between">
+                    City
+                    <span class="text-danger">*required</span>
+                </label>
+                <input 
+                    id="city-input" 
+                    class="form-control" 
+                    type="text" 
+                    placeholder="Mesa" 
+                    disabled
+                    required 
+                />
+                <span id="city-error" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label class="form-label d-flex justify-content-between">
+                    State
+                    <span class="text-danger">*required</span>
+                </label>
+                <input 
+                    id="state-input" 
+                    class="form-control" 
+                    type="text" 
+                    placeholder="Arizona" 
+                    disabled
+                    required 
+                />
+                <span id="state-error" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label class="form-label d-flex justify-content-between">
+                    Zip Code
+                    <span class="text-danger">*required</span>
+                </label>
+                <input 
+                    id="zipcode-input" 
+                    class="form-control" 
+                    type="text" 
+                    placeholder="85202" 
+                    disabled
+                    required 
+                />
+                <span id="zipcode-error" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-4">
+                    <label class="form-label d-flex justify-content-between">
+                        Start Time
+                        <span class="text-danger">*required</span>
+                    </label>
+                    <input 
+                        id="start_time-input" 
+                        class="form-control" 
+                        type="time" 
+                        disabled
+                        required 
+                    />
+                    <span id="zipcode-error" class="text-danger"></span>
+                </div>
+                <div class="col-12 col-md-6 mb-4">
+                    <label class="form-label d-flex justify-content-between">
+                        End Time
+                        <span class="text-danger">*required</span>
+                    </label>
+                    <input 
+                        id="end_time-input" 
+                        class="form-control" 
+                        type="time" 
+                        disabled
+                        required 
+                    />
+                    <span id="zipcode-error" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <button id="submit-button" type="submit" class="btn btn-primary">
+        <i class="bi bi-floppy2-fill"></i> Save
+    </button>
+</form>

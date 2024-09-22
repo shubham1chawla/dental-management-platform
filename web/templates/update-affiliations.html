@@ -1,0 +1,17 @@
+{% extends "base_dashboard.html" %}
+
+{% block content %}
+
+{% component "page-header" %}
+    {% fill "heading" %}
+        <i class="bi bi-building"></i> Update Affiliation
+    {% endfill %}
+    {% fill "description" %}
+        Update {{doctor.name}}'s affiliation with {{clinic.name}}.
+        Hit the <i class="bi bi-floppy2-fill"></i> button once you are done.
+    {% endfill %}
+{% endcomponent %}
+
+{% component "affiliation-form" clinic="{{clinic}}" doctors="{{doctors}}" doctor="{{doctor}}" / %}
+
+{% endblock %}

@@ -1,5 +1,11 @@
 from django.shortcuts import render
+from django.template.defaulttags import register
 from service import interface
+
+
+@register.filter
+def get_range(value):
+    return range(value)
 
 
 def get_clinics_page(request):
@@ -26,6 +32,15 @@ def get_update_clinic_page(request, clinic_id: int):
 
 def get_add_clinic_page(request):
     return render(request, 'add-clinic.html')
+
+
+def get_update_affiliations_page(request, clinic_id: int, doctor_id: int):
+    context = {
+        'clinic': interface.get_clinic(clinic_id),
+        'doctors': interface.get_doctors(),
+        'doctor': interface.get_doctor(doctor_id),
+    }
+    return render(request, 'update-affiliations.html', context=context)
 
 
 def get_doctors_page(request):
