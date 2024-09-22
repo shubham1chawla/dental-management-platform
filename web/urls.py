@@ -18,5 +18,6 @@ urlpatterns = [
     path('patients/<int:patient_id>', view=views.get_patient_page, name='Patient Page'),
     path('patients/<int:patient_id>/update', view=views.get_update_patient_page, name='Update Patient Page'),
     path('patients/<int:patient_id>/schedule', view=views.get_schedule_page, name='Schedule Page'),
+    path('login', view=views.get_login, name='Login Page'),
     path('', view=RedirectView.as_view(permanent=False, url='clinics/')),
 ]

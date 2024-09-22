@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.template.defaulttags import register
 from service import interface
 
@@ -117,3 +118,16 @@ def get_schedule_page(request, patient_id: int):
         'procedures': interface.get_procedures(),
     }
     return render(request, 'schedule.html', context=context)
+
+
+def get_login(request):
+    user = None
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+    if user:
+        login(request, user)
+        return redirect(to='/clinics', permanent=False)
+    else:
+        return render(request, 'login.html')
