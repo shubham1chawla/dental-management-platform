@@ -28,26 +28,31 @@ This `django` project is a patient and provider management platform. Key feature
 > 1. Doctor's appointment slots are 1 hour long with 5 minutes buffer at the end.
 > 2. Doctor can only work 1 shift on a specific weekday. For instance, if a doctor works at Clinic 1 on Monday, users can not add this doctor's schedule to another clinic for Monday. Users must remove the affiliation with Clinic 1 first before adding Clinic 2's affiliation for Monday.
 
+## Project Structure
+
+```
+[ROOT]
+├── api                # <-- Contains all the REST API-related routes
+├── components         # <-- Contains reusable UI components using django_components
+├── core               # <-- Contains django's main settings.py and other configurations
+├── service            # <-- Contains application's backend and interface to all the database-related methods
+└── web                # <-- Contains all the webpages and user-facing routes
+    └── templates      # <-- Contains all the HTML templates
+```
+
 ## Local Setup
 
 > [!IMPORTANT]
 > The project uses the following tech-stack. If you don't have any of these installed on your system, please refer to the relevant documentation.
 > 1. **Docker** - The project uses Postgres database using Docker. If you don't have Docker installed on your system, please refer to [Docker's installation documentation](https://docs.docker.com/engine/install/).
 > 2. **Python 3.12.6** - You will need Python version `3.12.6` to run this project. Please refer to the [Python's documentation](https://www.python.org/downloads/) to install it on your system.
-> 3. **Poetry Dependency Manager** - Make sure you have `poetry` installed on your system. If not, use `pip install poetry` or `pip3 install poetry` command. Configure `poetry` to create virtual environments inside project directory by executing `poetry config virtualenvs.in-project true` command.
+> 3. **pip** - You will need to install `pip` to resolve project's Python dependencies. Please refer to the [pip installation documentation](https://pip.pypa.io/en/stable/installation/) to install `pip` on your system.
+> 4. **Poetry Dependency Manager** - Make sure you have `poetry` installed on your system. If not, use `pip install poetry` or `pip3 install poetry` command. Configure `poetry` to create virtual environments inside project directory by executing `poetry config virtualenvs.in-project true` command.
 
 - **Step 1:** Start by running the `postgres` Docker container on your system. Use the following command to run the database.
 
 ```sh
-docker run -d \
-	--name dentaldb \
-	-e POSTGRES_DB=postgres \
-	-e POSTGRES_USER=postgres \
-	-e POSTGRES_PASSWORD=postgres \
-	-e PGDATA=/var/lib/postgresql/data/pgdata \
-	-v ./db:/var/lib/postgresql/data \
-	-p "5432:5432" \
-	postgres
+docker run -d --name dentaldb -e POSTGRES_DB=postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e PGDATA=/var/lib/postgresql/data/pgdata -v ./db:/var/lib/postgresql/data -p "5432:5432" postgres
 ```
 
 > [!NOTE]
@@ -55,6 +60,11 @@ docker run -d \
 > In this case, 
 > - You can either shut the local `postgres` or `pgAdmin` server, or 
 > - Change the port in **Step 1** and in the [settings.py](/core/settings.py) file.
+
+> [!NOTE]
+> For Windows - 
+> 1. You will need to use a bash-based terminal. Assuming you have `git` installed on your system, you can use `Git Bash` for next steps.
+> 2. For creating super user, you will need to append `winpty` to the command. Final command will be `winpty python manage.py createsuperuser` to create the super user in Step 5.
 
 - **Step 2:** Install dependencies by executing `poetry install` command.
 - **Step 3:** To enter the virtual environment, use `poetry shell` command.
