@@ -9,12 +9,11 @@ This `django` project is a patient and provider management platform. Key feature
     - [Add new doctor affiliation (w/ office address and working hours)](#add-new-doctor-affiliation)
     - [Edit existing doctor affiliations](#edit-existing-doctor-affiliations)
     - [Remove doctor affiliations](#remove-doctor-affiliations)
-2. Doctors Management
-    - List all doctors (w/ specialties and number of affiliated clinics and patients)
-    - Add new doctors
-    - Edit doctor's details
-    - View affiliated clinics
-    - View affiliated patients
+2. [Doctors Management](#doctors-management)
+    - [List all doctors (w/ specialties and number of affiliated clinics and patients)](#list-all-doctors)
+    - [Add new doctors](#add-new-doctors)
+    - [Edit doctor's details](#edit-doctors-details)
+    - [View affiliated clinics & patients](#view-affiliated-clinics--patients)
 3. Patients Management
     - List all patients (w/ last and next visit's date, doctor, and procedure)
     - Add new patients
@@ -227,3 +226,79 @@ API Endpoint -
 ```
 DELETE /api/clinics/<clinic_id>/doctors/<doctor_id>/schedules/<schedule_id>/remove
 ```
+
+### Doctors Management
+
+#### List all doctors
+
+![All doctors screenshot](/screenshots/all-doctors.png)
+
+API Endpoint - 
+```
+GET /api/doctors/list
+```
+
+API Response (200) -
+```
+[
+  {
+    "id": 1,
+    "npi": "1122334455",
+    "name": "John Donson",
+    "email": "john.donson@doctor.com",
+    "phone_number": "+14807651234"
+  },
+  {
+    "id": 2,
+    "npi": "9871123761",
+    "name": "Tony Stark",
+    "email": "tony.stark@doctor.com",
+    "phone_number": "+19452171821"
+  }
+]
+```
+
+#### Add new doctors
+
+![Add new doctors screenshot](/screenshots/add-new-doctor.png)
+
+API Endpoint -
+```
+POST /api/doctors/add
+```
+
+Request body - 
+```
+{
+  "name": "Bruce Wayne",
+  "email": "bruce.wayne@doctor.com",
+  "phone_number": "+19452161776",
+  "npi": 3412567812,
+  "specialties": [1, 2]
+}
+```
+
+#### Edit doctor's details
+
+![Edit doctor screenshot](/screenshots/edit-doctor.png)
+
+API Endpoint -
+```
+PUT /api/doctors/<doctor_id>/update
+```
+
+Request body - 
+```
+{
+  "name": "Bruce Wayne",
+  "email": "bruce.wayne@doctor.com",
+  "phone_number": "+19452161776",
+  "npi": 3412567812,
+  "specialties": [1, 2]
+}
+```
+
+#### View affiliated clinics & patients
+
+![Doctor page screenshot](/screenshots/doctor-page.png)
+
