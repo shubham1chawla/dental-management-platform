@@ -1,6 +1,7 @@
 # Dental Management Platform
 
 This `django` project is a patient and provider management platform. Key features includes - 
+
 1. [Clinics Management](#clinics-management) 
     - [List all clinics (w/ number of affiliated doctors and patients)](#list-all-clinics)
     - [Add new clinics](#add-new-clinics)
@@ -14,13 +15,13 @@ This `django` project is a patient and provider management platform. Key feature
     - [Add new doctors](#add-new-doctors)
     - [Edit doctor's details](#edit-doctors-details)
     - [View affiliated clinics & patients](#view-affiliated-clinics--patients)
-3. Patients Management
-    - List all patients (w/ last and next visit's date, doctor, and procedure)
-    - Add new patients
-    - Edit patient's details
-    - List all visits (w/ doctor's notes, if present)
-    - Add new visits
-    - View upcoming visit (w/ when the visit's booking date)
+3. [Patients Management](#patients-management)
+    - [List all patients (w/ last and next visit's date, doctor, and procedure)](#list-all-patients)
+    - [Add new patients](#add-new-patients)
+    - [Edit patient's details](#edit-patients-details)
+    - [List all visits (w/ doctor's notes, if present)](#list-all-visits)
+    - [Add new visits](#add-new-visits)
+
 
 > [!NOTE]
 > The project made the following assumptions - 
@@ -302,3 +303,159 @@ Request body -
 
 ![Doctor page screenshot](/screenshots/doctor-page.png)
 
+### Patients Management
+
+#### List all patients
+
+![All patients screenshot](/screenshots/all-patients.png)
+
+API Endpoint - 
+```
+GET /api/patients/list
+```
+
+API Response (200) -
+```
+[
+  {
+    "id": 1,
+    "address": {
+      "id": 3,
+      "street_address_1": "1234 S House Rd",
+      "street_address_2": "Apt 10",
+      "city": "Mesa",
+      "state": "Arizona",
+      "zipcode": "85202"
+    },
+    "name": "Alice Bob",
+    "email": "alice.bob@gmail.com",
+    "phone_number": "+14809761234",
+    "dob": "1995-09-01",
+    "ssn": 9876,
+    "gender": "F"
+  },
+  {
+    "id": 2,
+    "address": {
+      "id": 7,
+      "street_address_1": "#1 Bruce St",
+      "street_address_2": null,
+      "city": "Chicago",
+      "state": "Illinois",
+      "zipcode": "77212-9123"
+    },
+    "name": "Bruce Wayne",
+    "email": "bruce@wayne.com",
+    "phone_number": "+14802981234",
+    "dob": "1981-09-05",
+    "ssn": 6542,
+    "gender": "M"
+  }
+]
+```
+
+#### Add new patients
+
+![Add new patients screenshot](/screenshots/add-new-patient.png)
+
+API Endpoint -
+```
+POST /api/patients/add
+```
+
+Request body - 
+```
+{
+  "name": "Pepper Pots",
+  "dob": "1998-03-28",
+  "ssn": 7621,
+  "email": "pepper.pots@stark.com",
+  "phone_number": "+19452161991",
+  "gender": "F",
+  "address": {
+    "street_address_1": "87 E Famous Rd",
+    "street_address_2": "#151",
+    "city": "Phoenix",
+    "state": "Arizona",
+    "zipcode": "87654-1234"
+  }
+}
+```
+
+#### Edit patient's details
+
+![Edit patient screenshot](/screenshots/edit-patient.png)
+
+API Endpoint -
+```
+PUT /api/patients/<patient_id>/update
+```
+
+Request body - 
+```
+{
+  "name": "Pepper Pots",
+  "dob": "1998-03-28",
+  "ssn": 7621,
+  "email": "pepper.pots@stark.com",
+  "phone_number": "+19452161991",
+  "gender": "F",
+  "address": {
+    "street_address_1": "87 E Famous Rd",
+    "street_address_2": "#151",
+    "city": "Phoenix",
+    "state": "Arizona",
+    "zipcode": "87654-1234"
+  }
+}
+```
+
+#### List all visits
+
+![All visits screenshot](/screenshots/all-visits.png)
+
+API Endpoint - 
+```
+GET /api/patients/1/appointments/list
+```
+
+API Response (200) -
+```
+[
+  {
+    "id": 1,
+    "clinic": { ... },
+    "doctor": { ... },
+    "patient": { ... },
+    "date": "2024-09-23",
+    "start_time": "11:00:00",
+    "end_time": "11:55:00",
+    "notes": "Great dental health!",
+    "created_at": "2024-09-22T23:13:12.468891Z",
+    "modified_at": "2024-09-23T01:53:09.446593Z",
+    "clinic_id": 1,
+    "doctor_id": 1,
+    "patient_id": 1
+  }
+]
+```
+#### Add new visits
+
+![Add new visit screenshot](/screenshots/add-new-visit.png)
+
+API Endpoint -
+```
+POST /api/patients/<patient_id>/appointments/add
+```
+
+Request body - 
+```
+{
+  "procedure_id": 4,
+  "clinic_id": 1,
+  "doctor_id": 2,
+  "date": "2024-09-23",
+  "start_time": "13:00:00,
+  "end_time": "13:55:00",
+}
+```
