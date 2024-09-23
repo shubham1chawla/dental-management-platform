@@ -30,16 +30,39 @@ This `django` project is a patient and provider management platform. Key feature
 
 ## Local Setup
 
-- You will need Python version `3.12.6` to run this project. Please refer to the [Python's documentation](https://www.python.org/downloads/) to install it on your system.
-- Make sure you have `poetry` installed on your system. If not, use `pip install poetry` or `pip3 install poetry` command.
-- Configure `poetry` to create virtual environments inside project directory by executing `poetry config virtualenvs.in-project true` command.
-- Install dependencies by executing `poetry install` command.
-- To enter the virtual environment, use `poetry shell` command.
-- Create a super user for development using `python manage.py createsuperuser` command. Make sure you remember the credentials.
-- Migrate local `sqlite3` database with necessary tables using `python manage.py migrate` command.
-- Execute `python manage.py runserver` command to run the server.
-- Navigate to [localhost:8000](http://localhost:8000/) to access the application.
-- Use the super user's credentials to login to the application.
+> [!IMPORTANT]
+> The project uses the following tech-stack. If you don't have any of these installed on your system, please refer to the relevant documentation.
+> 1. **Docker** - The project uses Postgres database using Docker. If you don't have Docker installed on your system, please refer to [Docker's installation documentation](https://docs.docker.com/engine/install/).
+> 2. **Python 3.12.6** - You will need Python version `3.12.6` to run this project. Please refer to the [Python's documentation](https://www.python.org/downloads/) to install it on your system.
+> 3. **Poetry Dependency Manager** - Make sure you have `poetry` installed on your system. If not, use `pip install poetry` or `pip3 install poetry` command. Configure `poetry` to create virtual environments inside project directory by executing `poetry config virtualenvs.in-project true` command.
+
+- **Step 1:** Start by running the `postgres` Docker container on your system. Use the following command to run the database.
+
+```sh
+docker run -d \
+	--name dentaldb \
+	-e POSTGRES_DB=postgres \
+	-e POSTGRES_USER=postgres \
+	-e POSTGRES_PASSWORD=postgres \
+	-e PGDATA=/var/lib/postgresql/data/pgdata \
+	-v ./db:/var/lib/postgresql/data \
+	-p "5432:5432" \
+	postgres
+```
+
+> [!NOTE]
+> You might see an error that Docker was unable to expose port `5432` on your system. This error can be because of a local instance of `postgres` or `pgAdmin` that is running on your system.
+> In this case, 
+> - You can either shut the local `postgres` or `pgAdmin` server, or 
+> - Change the port in **Step 1** and in the [settings.py](/core/settings.py) file.
+
+- **Step 2:** Install dependencies by executing `poetry install` command.
+- **Step 3:** To enter the virtual environment, use `poetry shell` command.
+- **Step 4:** Migrate local `postgres` database with necessary tables using `python manage.py migrate` command.
+- **Step 5:** Create a super user for development using `python manage.py createsuperuser` command. **Make sure you remember the credentials.**
+- **Step 6:** Execute `python manage.py runserver` command to run the server.
+- **Step 7:** Navigate to [localhost:8000](http://localhost:8000/) to access the application.
+- **Step 8:** Use the super user's credentials (Step 5) to login to the application.
 
 ## Features
 

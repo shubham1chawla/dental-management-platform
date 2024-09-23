@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 from django.template.defaulttags import register
 from service import interface
 
@@ -126,8 +127,9 @@ def get_login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-    if user:
-        login(request, user)
-        return redirect(to='/clinics', permanent=False)
-    else:
-        return render(request, 'login.html')
+        if user:
+            login(request, user)
+            return redirect(to='/clinics', permanent=False)
+        else:
+            messages.success(request, ('No user found with the specified credentials...'))
+    return render(request, 'login.html')

@@ -232,4 +232,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Application
+pgdata
+
 # End of https://www.toptal.com/developers/gitignore/api/python,macos,windows
